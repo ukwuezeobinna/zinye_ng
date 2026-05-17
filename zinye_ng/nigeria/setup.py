@@ -31,6 +31,7 @@ def after_install():
 def after_migrate():
     create_nigeria_custom_fields()
     _link_payroll_components()
+    _create_ng_salary_structures()
     frappe.db.commit()
 
 
@@ -331,6 +332,102 @@ def _link_payroll_components():
             changed = True
     if changed:
         settings.save(ignore_permissions=True)
+
+
+_NG_STRUCTURE_NAME = "NG Employee Standard"
+
+# Components required before the salary structure can be created.
+# Ordered so that each row's formula variables are already in the structure
+# by the time ERPNext evaluates them (earnings first, in dependency order).
+_NG_EARNINGS = [
+    "NG - Basic Salary",
+    "NG - Housing Allowance",
+    "NG - Transport Allowance",
+    "NG - Pensionable Base",        # formula: basic_salary + housing_allowance + transport_allowance
+    "NG - Pension Employer",        # formula: pension_employee_base * 0.10 — statistical
+    "NG - NSITF",                   # formula: gross_pay * 0.01 — statistical
+]
+
+_NG_DEDUCTIONS = [
+    "NG - Pension Employee",        # formula: pension_employee_base * 0.08
+    "NG - NHF",                     # formula: basic_salary * 0.025
+    "NG - NHIS",                    # formula: gross_pay * 0.05
+    "NG - PAYE Tax",                # computed by salary_slip hook — variable_based_on_taxable_salary
+]
+
+
+def _create_ng_salary_structures():
+    """
+    Create 'NG Employee Standard' salary structure for each Nigeria company.
+
+    Idempotent — skips companies that already have the structure. Requires all
+    NG salary component fixtures to be loaded (runs in after_migrate, after import).
+    """
+    all_components = _NG_EARNINGS + _NG_DEDUCTIONS
+    missing = [c for c in all_components if not frappe.db.exists("Salary Component", c)]
+    if missing:
+        return
+
+    companies = frappe.get_all("Company", filters={"country": "Nigeria"}, pluck="name")
+    for company in companies:
+        _ensure_ng_structure(company)
+
+
+def _ensure_ng_structure(company):
+    if frappe.db.exists("Salary Structure", _NG_STRUCTURE_NAME):
+        return
+
+    currency = frappe.db.get_value("Company", company, "default_currency") or "NGN"
+
+    struct = frappe.new_doc("Salary Structure")
+    struct.name = _NG_STRUCTURE_NAME
+    struct.company = company
+    struct.is_active = "Yes"
+    struct.payroll_frequency = "Monthly"
+    struct.currency = currency
+
+    for component_name in _NG_EARNINGS:
+        _append_component_row(struct, "earnings", component_name)
+
+    for component_name in _NG_DEDUCTIONS:
+        _append_component_row(struct, "deductions", component_name)
+
+    struct.insert(ignore_permissions=True)
+
+
+def _append_component_row(struct, table, component_name):
+    """Append a Salary Detail row, populating fetch_from fields from the component."""
+    comp = frappe.db.get_value(
+        "Salary Component",
+        component_name,
+        [
+            "salary_component_abbr",
+            "statistical_component",
+            "depends_on_payment_days",
+            "exempted_from_income_tax",
+            "variable_based_on_taxable_salary",
+            "do_not_include_in_total",
+            "amount_based_on_formula",
+            "formula",
+            "condition",
+        ],
+        as_dict=True,
+    )
+    if not comp:
+        return
+
+    struct.append(table, {
+        "salary_component": component_name,
+        "abbr": comp.salary_component_abbr,
+        "statistical_component": comp.statistical_component,
+        "depends_on_payment_days": comp.depends_on_payment_days,
+        "exempted_from_income_tax": comp.exempted_from_income_tax,
+        "variable_based_on_taxable_salary": comp.variable_based_on_taxable_salary,
+        "do_not_include_in_total": comp.do_not_include_in_total,
+        "amount_based_on_formula": comp.amount_based_on_formula,
+        "formula": comp.formula or "",
+        "condition": comp.condition or "",
+    })
 
 
 def create_default_nigeria_payroll_settings():

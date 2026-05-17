@@ -1,6 +1,56 @@
 [
   {
     "doctype": "Salary Component",
+    "name": "NG - Basic Salary",
+    "salary_component": "NG - Basic Salary",
+    "salary_component_abbr": "basic_salary",
+    "type": "Earning",
+    "depends_on_payment_days": 1,
+    "exempted_from_income_tax": 0,
+    "statistical_component": 0,
+    "variable_based_on_taxable_salary": 0,
+    "description": "Monthly basic salary. Prorated by payment days. Foundation for NHF (2.5%) and pensionable base (PRA 2014 s.4)."
+  },
+  {
+    "doctype": "Salary Component",
+    "name": "NG - Housing Allowance",
+    "salary_component": "NG - Housing Allowance",
+    "salary_component_abbr": "housing_allowance",
+    "type": "Earning",
+    "depends_on_payment_days": 0,
+    "exempted_from_income_tax": 0,
+    "statistical_component": 0,
+    "variable_based_on_taxable_salary": 0,
+    "description": "Monthly housing allowance. Included in pensionable emolument (PRA 2014 s.4)."
+  },
+  {
+    "doctype": "Salary Component",
+    "name": "NG - Transport Allowance",
+    "salary_component": "NG - Transport Allowance",
+    "salary_component_abbr": "transport_allowance",
+    "type": "Earning",
+    "depends_on_payment_days": 0,
+    "exempted_from_income_tax": 0,
+    "statistical_component": 0,
+    "variable_based_on_taxable_salary": 0,
+    "description": "Monthly transport allowance. Included in pensionable emolument (PRA 2014 s.4)."
+  },
+  {
+    "doctype": "Salary Component",
+    "name": "NG - Pensionable Base",
+    "salary_component": "NG - Pensionable Base",
+    "salary_component_abbr": "pension_employee_base",
+    "type": "Earning",
+    "depends_on_payment_days": 0,
+    "exempted_from_income_tax": 1,
+    "statistical_component": 1,
+    "variable_based_on_taxable_salary": 0,
+    "amount_based_on_formula": 1,
+    "formula": "basic_salary + housing_allowance + transport_allowance",
+    "description": "Pensionable emolument: Basic + Housing + Transport. PRA 2014 s.4(1). Statistical — reference for pension computation only."
+  },
+  {
+    "doctype": "Salary Component",
     "name": "NG - Pension Employee",
     "salary_component": "NG - Pension Employee",
     "salary_component_abbr": "NG-PENS-EE",
@@ -9,6 +59,7 @@
     "exempted_from_income_tax": 1,
     "statistical_component": 0,
     "variable_based_on_taxable_salary": 0,
+    "amount_based_on_formula": 1,
     "formula": "pension_employee_base * 0.08",
     "description": "Employee Pension Contribution: 8% of (Basic + Housing + Transport). PRA 2014 s.4(1). Exempt from PAYE (s.30 Nigeria Tax Act 2025).",
     "ng_component_type": "Pension (Employee)"
@@ -23,6 +74,7 @@
     "exempted_from_income_tax": 1,
     "statistical_component": 1,
     "variable_based_on_taxable_salary": 0,
+    "amount_based_on_formula": 1,
     "formula": "pension_employee_base * 0.10",
     "description": "Employer Pension Contribution: 10% of (Basic + Housing + Transport). PRA 2014 s.4(1). Statistical — shown on slip, not part of net pay.",
     "ng_component_type": "Pension (Employer)"
@@ -37,6 +89,7 @@
     "exempted_from_income_tax": 1,
     "statistical_component": 0,
     "variable_based_on_taxable_salary": 0,
+    "amount_based_on_formula": 1,
     "condition": "basic_salary >= 3000",
     "formula": "basic_salary * 0.025",
     "description": "National Housing Fund: 2.5% of basic salary. Exempt from PAYE (s.30). Exempted if basic < ₦3,000/month.",
@@ -52,6 +105,7 @@
     "exempted_from_income_tax": 1,
     "statistical_component": 0,
     "variable_based_on_taxable_salary": 0,
+    "amount_based_on_formula": 1,
     "formula": "gross_pay * 0.05",
     "description": "National Health Insurance Scheme: 5% of gross. Exempt from PAYE (s.30 Nigeria Tax Act 2025).",
     "ng_component_type": "NHIS"
@@ -66,6 +120,7 @@
     "exempted_from_income_tax": 1,
     "statistical_component": 1,
     "variable_based_on_taxable_salary": 0,
+    "amount_based_on_formula": 1,
     "formula": "gross_pay * 0.01",
     "description": "Nigeria Social Insurance Trust Fund: 1% of total emolument. Employer contribution — statistical only.",
     "ng_component_type": "NSITF"
@@ -80,6 +135,7 @@
     "exempted_from_income_tax": 1,
     "statistical_component": 1,
     "variable_based_on_taxable_salary": 0,
+    "amount_based_on_formula": 1,
     "formula": "gross_pay * 0.01",
     "description": "Industrial Training Fund: 1% of annual payroll (annualised here). Applies if company has 5+ staff OR ₦50M+ annual payroll. Statistical only.",
     "ng_component_type": "ITF"

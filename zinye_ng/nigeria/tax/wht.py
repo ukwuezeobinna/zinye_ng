@@ -6,7 +6,7 @@ Section 51, Nigeria Tax Act 2025: WHT rates are prescribed in regulations
 linked to the supplier's WHT category.
 
 On Purchase Invoice submission:
-  1. Check if custom_ng_wht_applicable is ticked
+  1. Check if ng_wht_applicable is ticked
   2. Look up WHT rate from supplier's WHT category (fallback: invoice rate field)
   3. Compute WHT amount = taxable amount × rate
   4. Create a Journal Entry: Dr Payable / Cr WHT Payable

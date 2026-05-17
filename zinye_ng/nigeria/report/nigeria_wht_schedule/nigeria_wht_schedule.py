@@ -49,16 +49,16 @@ def get_data(filters):
             PurchaseInvoice.supplier,
             PurchaseInvoice.supplier_name,
             PurchaseInvoice.net_total,
-            PurchaseInvoice.custom_ng_wht_rate.as_("wht_rate"),
-            PurchaseInvoice.custom_ng_wht_amount.as_("wht_amount"),
-            Supplier.custom_ng_tin.as_("supplier_tin"),
-            Supplier.custom_ng_rc_number.as_("supplier_rc"),
-            Supplier.custom_ng_wht_category.as_("wht_category"),
+            PurchaseInvoice.ng_wht_rate.as_("wht_rate"),
+            PurchaseInvoice.ng_wht_amount.as_("wht_amount"),
+            Supplier.ng_tin.as_("supplier_tin"),
+            Supplier.ng_rc_number.as_("supplier_rc"),
+            Supplier.ng_wht_category.as_("wht_category"),
         )
         .where(
             (PurchaseInvoice.docstatus == 1)
-            & (PurchaseInvoice.custom_ng_wht_applicable == 1)
-            & (PurchaseInvoice.custom_ng_wht_amount > 0)
+            & (PurchaseInvoice.ng_wht_applicable == 1)
+            & (PurchaseInvoice.ng_wht_amount > 0)
         )
     )
 
@@ -69,7 +69,7 @@ def get_data(filters):
     if filters.to_date:
         query = query.where(PurchaseInvoice.posting_date <= filters.to_date)
     if filters.wht_category:
-        query = query.where(Supplier.custom_ng_wht_category == filters.wht_category)
+        query = query.where(Supplier.ng_wht_category == filters.wht_category)
 
     rows = query.run(as_dict=True)
     if not rows:

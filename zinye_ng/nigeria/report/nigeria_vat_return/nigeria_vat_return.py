@@ -86,10 +86,12 @@ def get_data(filters):
 def _get_output_vat(filters) -> list[dict]:
     SalesInvoice = frappe.qb.DocType("Sales Invoice")
     SalesTax = frappe.qb.DocType("Sales Taxes and Charges")
+    Customer = frappe.qb.DocType("Customer")
 
     query = (
         frappe.qb.from_(SalesInvoice)
         .inner_join(SalesTax).on(SalesInvoice.name == SalesTax.parent)
+        .left_join(Customer).on(SalesInvoice.customer == Customer.name)
         .select(
             SalesInvoice.name,
             SalesInvoice.posting_date,
@@ -98,6 +100,7 @@ def _get_output_vat(filters) -> list[dict]:
             SalesInvoice.grand_total,
             SalesTax.tax_amount,
             SalesTax.rate,
+            Customer.ng_tin.as_("customer_tin"),
         )
         .where(
             (SalesInvoice.docstatus == 1)
@@ -116,8 +119,7 @@ def _get_output_vat(filters) -> list[dict]:
             "document": r.name,
             "posting_date": r.posting_date,
             "party": r.customer_name,
-            "tin": frappe.db.get_value("Sales Invoice", r.name, "customer") and
-                   frappe.db.get_value("Customer", frappe.db.get_value("Sales Invoice", r.name, "customer"), "custom_ng_tin") or "",
+            "tin": r.customer_tin or "",
             "net_amount": r.net_total,
             "vat_amount": r.tax_amount,
             "grand_total": r.grand_total,

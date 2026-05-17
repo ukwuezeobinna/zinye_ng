@@ -163,7 +163,7 @@ def submit_pos_invoice_to_atrs(pos_invoice: str) -> dict:
         total_value=float(doc.grand_total),
         payment_type=payment_type,
         tax_free=float(doc.total_taxes_and_charges or 0) * 0,
-        client_vat_number=frappe.db.get_value("Customer", doc.customer, "tax_id") or "",
+        client_vat_number=frappe.db.get_value("Customer", doc.customer, "ng_tin") or "",
         currency_code=doc.currency or "NGN",
     )
 

@@ -49,8 +49,8 @@ def get_data(filters):
             SalarySlip.employee_name,
             SalarySlip.department,
             SalarySlip.gross_pay,
-            Employee.custom_ng_rsa_pin.as_("ng_rsa_pin"),
-            Employee.custom_ng_pfa_name.as_("ng_pfa_name"),
+            Employee.ng_rsa_pin.as_("ng_rsa_pin"),
+            Employee.ng_pfa_name.as_("ng_pfa_name"),
         )
         .where(SalarySlip.docstatus == 1)
     )

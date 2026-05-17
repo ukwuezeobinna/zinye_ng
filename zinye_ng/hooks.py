@@ -1,7 +1,7 @@
 app_name = "zinye_ng"
 app_title = "Zinye Nigeria"
 app_publisher = "Zinye"
-app_description = "Nigeria compliance: PAYE, Pension, NHF, NSITF, ITF, VAT, WHT, FIRS ATRS, FIRSMBS e-invoicing, NDPR"
+app_description = "Nigeria compliance: PAYE, Pension, NHF, NHIS, NSITF, ITF, VAT, WHT, NRS ATRS, NRS MBS e-invoicing, NDPR"
 app_email = "dev@zinye.com"
 app_license = "MIT"
 app_version = "0.1.0"
@@ -21,7 +21,7 @@ before_uninstall = "zinye_ng.nigeria.setup.before_uninstall"
 fixtures = [
     # Nigeria Income Tax Slab (PAYE bands — Nigeria Tax Act 2025, effective 1 Jan 2026)
     {"dt": "Income Tax Slab", "filters": [["name", "in", ["Nigeria PAYE 2026"]]]},
-    # Salary Components: CRA, Pension, NHF, NSITF, ITF, PAYE
+    # Salary Components: Pension, NHF, NHIS, NSITF, ITF, PAYE
     {
         "dt": "Salary Component",
         "filters": [["name", "in", [
@@ -46,20 +46,16 @@ fixtures = [
 # ---------------------------------------------------------------------------
 doc_events = {
     "Salary Slip": {
-        # Recompute Nigeria deductions whenever the slip is saved/recalculated
         "validate": "zinye_ng.nigeria.payroll.salary_slip.on_validate",
     },
     "Sales Invoice": {
-        # Submit B2B invoice to FIRSMBS on submit; flag for ATRS if B2C
         "on_submit": "zinye_ng.nigeria.firs.hooks.on_sales_invoice_submit",
         "on_cancel": "zinye_ng.nigeria.firs.hooks.on_sales_invoice_cancel",
     },
     "POS Invoice": {
-        # Real-time ATRS submission for B2C receipts
         "on_submit": "zinye_ng.nigeria.firs.hooks.on_pos_invoice_submit",
     },
     "Purchase Invoice": {
-        # Apply WHT on submission
         "on_submit": "zinye_ng.nigeria.tax.wht.on_purchase_invoice_submit",
     },
     "Nigeria Data Subject Request": {
@@ -72,13 +68,10 @@ doc_events = {
 # ---------------------------------------------------------------------------
 scheduler_events = {
     "hourly": [
-        # Poll pending FIRSMBS submissions for IRN status
         "zinye_ng.nigeria.firs.einvoice.poll_pending_einvoices",
     ],
     "daily": [
-        # Retry failed ATRS submissions from the last 24h
         "zinye_ng.nigeria.firs.atrs.retry_failed_submissions",
-        # Warn on NDPR requests approaching 30-day SLA
         "zinye_ng.nigeria.ndpr.send_sla_warnings",
     ],
 }

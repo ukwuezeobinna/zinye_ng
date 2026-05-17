@@ -30,7 +30,7 @@ _SANDBOX_BASE = "https://api-sandbox.einvoice.firs.gov.ng"  # unconfirmed — up
 _PROD_BASE = "https://api.einvoice.firs.gov.ng"             # unconfirmed — update after registration
 # ─────────────────────────────────────────────────────────────────────────────
 
-_EINVOICE_SETTINGS_DOCTYPE = "FIRS E-Invoice Settings"
+_EINVOICE_SETTINGS_DOCTYPE = "NRS E-Invoice Settings"
 
 
 class EInvoiceError(Exception):
@@ -42,7 +42,7 @@ class EInvoiceNotConfigured(EInvoiceError):
 
 
 def _get_settings():
-    # TODO: create FIRS E-Invoice Settings single doctype after schema confirmation
+    # TODO: create NRS E-Invoice Settings single doctype after schema confirmation
     return frappe.get_single(_EINVOICE_SETTINGS_DOCTYPE)
 
 

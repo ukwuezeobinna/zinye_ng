@@ -19,7 +19,7 @@ def retry_failed_submissions():
     """
     yesterday = add_days(now_datetime(), -1)
     failed_logs = frappe.get_all(
-        "FIRS ATRS Log",
+        "NRS ATRS Log",
         filters={
             "status": "Failed",
             "document_type": "POS Invoice",
@@ -32,7 +32,7 @@ def retry_failed_submissions():
         try:
             result = submit_pos_invoice_to_atrs(log.document_name)
             if result.get("payment_code"):
-                frappe.db.set_value("FIRS ATRS Log", log.name, "status", "Submitted")
+                frappe.db.set_value("NRS ATRS Log", log.name, "status", "Submitted")
         except ATRSError as e:
             frappe.log_error(
                 f"ATRS retry failed for POS Invoice {log.document_name}: {e}",

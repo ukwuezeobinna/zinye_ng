@@ -43,7 +43,7 @@ def on_sales_invoice_cancel(doc, method=None):
 
 def on_pos_invoice_submit(doc, method=None):
     """Submit B2C POS receipt to FIRS ATRS in background."""
-    settings = frappe.get_single("FIRS ATRS Settings")
+    settings = frappe.get_single("NRS ATRS Settings")
     if not settings.enabled:
         return
 

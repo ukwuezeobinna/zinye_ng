@@ -23,8 +23,8 @@
     {"fieldname": "environment", "fieldtype": "Select", "label": "Environment", "options": "Development\nProduction", "default": "Development", "reqd": 1},
     {"fieldname": "col_break_top", "fieldtype": "Column Break"},
     {"fieldname": "vat_number", "fieldtype": "Data", "label": "VAT Number", "reqd": 1, "description": "Business VAT Registration Number"},
-    {"fieldname": "business_place", "fieldtype": "Data", "label": "Business Place Code", "reqd": 1, "description": "FIRS-assigned business location code"},
-    {"fieldname": "business_device", "fieldtype": "Data", "label": "Device Code", "reqd": 1, "description": "FIRS-assigned fiscal device identifier"},
+    {"fieldname": "business_place", "fieldtype": "Data", "label": "Business Place Code", "reqd": 1, "description": "NRS-assigned business location code"},
+    {"fieldname": "business_device", "fieldtype": "Data", "label": "Device Code", "reqd": 1, "description": "NRS-assigned fiscal device identifier"},
     {"fieldname": "credentials_section", "fieldtype": "Section Break", "label": "OAuth Credentials"},
     {"fieldname": "client_id", "fieldtype": "Data", "label": "Client ID", "reqd": 1},
     {"fieldname": "client_secret", "fieldtype": "Password", "label": "Client Secret", "reqd": 1},
@@ -35,7 +35,7 @@
   "is_single": 1,
   "issingle": 1,
   "module": "Nigeria",
-  "name": "FIRS ATRS Settings",
+  "name": "NRS ATRS Settings",
   "permissions": [
     {"role": "Accounts Manager", "read": 1, "write": 1},
     {"role": "System Manager", "read": 1, "write": 1}

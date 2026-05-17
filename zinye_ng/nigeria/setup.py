@@ -84,7 +84,7 @@ def _get_custom_fields():
                 "label": "TIN (Tax Identification Number)",
                 "fieldtype": "Data",
                 "insert_after": "ng_compliance_section",
-                "description": "12-digit FIRS Tax Identification Number",
+                "description": "12-digit NRS Tax Identification Number",
             },
             {
                 "fieldname": "ng_rc_number",
@@ -187,7 +187,7 @@ def _get_custom_fields():
                 "label": "TIN",
                 "fieldtype": "Data",
                 "insert_after": "tax_id",
-                "description": "Required for B2B FIRS e-invoicing",
+                "description": "Required for B2B NRS e-invoicing",
             },
             {
                 "fieldname": "ng_rc_number",
@@ -226,7 +226,7 @@ def _get_custom_fields():
         "Sales Invoice": [
             {
                 "fieldname": "ng_firs_section",
-                "label": "FIRS e-Invoice",
+                "label": "NRS e-Invoice",
                 "fieldtype": "Section Break",
                 "insert_after": "against_income_account",
                 "collapsible": 1,
@@ -237,7 +237,7 @@ def _get_custom_fields():
                 "fieldtype": "Data",
                 "insert_after": "ng_firs_section",
                 "read_only": 1,
-                "description": "Invoice Reference Number from FIRS FIRSMBS",
+                "description": "Invoice Reference Number from NRS FIRSMBS",
             },
             {
                 "fieldname": "ng_firs_csid",
@@ -245,11 +245,11 @@ def _get_custom_fields():
                 "fieldtype": "Data",
                 "insert_after": "ng_firs_irn",
                 "read_only": 1,
-                "description": "Cryptographic Stamp Identifier from FIRS",
+                "description": "Cryptographic Stamp Identifier from NRS",
             },
             {
                 "fieldname": "ng_firs_status",
-                "label": "FIRS Status",
+                "label": "NRS Status",
                 "fieldtype": "Select",
                 "insert_after": "ng_firs_csid",
                 "options": "Not Required\nPending\nSubmitted\nCleared\nFailed",

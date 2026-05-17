@@ -34,7 +34,7 @@ class ATRSError(Exception):
 
 
 def _get_settings() -> "frappe.Document":
-    return frappe.get_single("FIRS ATRS Settings")
+    return frappe.get_single("NRS ATRS Settings")
 
 
 def _base_url(settings) -> str:
@@ -172,7 +172,7 @@ def submit_pos_invoice_to_atrs(pos_invoice: str) -> dict:
 
 
 def _log_atrs_submission(doc, result: dict):
-    log = frappe.new_doc("FIRS ATRS Log")
+    log = frappe.new_doc("NRS ATRS Log")
     log.document_type = doc.doctype
     log.document_name = doc.name
     log.bill_number = doc.name

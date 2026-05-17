@@ -33,7 +33,7 @@
   ],
   "in_create": 0,
   "module": "Nigeria",
-  "name": "FIRS ATRS Log",
+  "name": "NRS ATRS Log",
   "permissions": [
     {"role": "Accounts User", "read": 1},
     {"role": "Accounts Manager", "read": 1, "write": 1},

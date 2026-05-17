@@ -30,6 +30,7 @@ def after_install():
 
 def after_migrate():
     create_nigeria_custom_fields()
+    _link_payroll_components()
     frappe.db.commit()
 
 
@@ -310,6 +311,26 @@ def _get_custom_fields():
             },
         ],
     }
+
+
+def _link_payroll_components():
+    """Set component links on Nigeria Payroll Settings if the fixtures exist."""
+    component_map = {
+        "pension_employee_component": "NG - Pension Employee",
+        "pension_employer_component": "NG - Pension Employer",
+        "nhf_component": "NG - NHF",
+        "nhis_component": "NG - NHIS",
+        "nsitf_component": "NG - NSITF",
+        "itf_component": "NG - ITF",
+    }
+    settings = frappe.get_single("Nigeria Payroll Settings")
+    changed = False
+    for field, component in component_map.items():
+        if not settings.get(field) and frappe.db.exists("Salary Component", component):
+            settings.set(field, component)
+            changed = True
+    if changed:
+        settings.save(ignore_permissions=True)
 
 
 def create_default_nigeria_payroll_settings():

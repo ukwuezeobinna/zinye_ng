@@ -1,0 +1,48 @@
+{
+  "actions": [],
+  "creation": "2026-01-01 00:00:00.000000",
+  "doctype": "DocType",
+  "document_type": "Document",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "sales_invoice",
+    "status",
+    "col_break_1",
+    "irn",
+    "csid",
+    "submitted_at",
+    "payload_section",
+    "payload",
+    "col_break_payload",
+    "response",
+    "error_section",
+    "error_message"
+  ],
+  "fields": [
+    {"fieldname": "sales_invoice", "fieldtype": "Link", "label": "Sales Invoice", "options": "Sales Invoice", "reqd": 1, "in_list_view": 1, "unique": 1},
+    {"fieldname": "status", "fieldtype": "Select", "label": "Status", "options": "Pending\nSubmitted\nCleared\nFailed", "reqd": 1, "in_list_view": 1, "in_filter": 1},
+    {"fieldname": "col_break_1", "fieldtype": "Column Break"},
+    {"fieldname": "irn", "fieldtype": "Data", "label": "IRN", "read_only": 1, "in_list_view": 1, "description": "Invoice Reference Number from FIRS FIRSMBS"},
+    {"fieldname": "csid", "fieldtype": "Data", "label": "CSID", "read_only": 1, "description": "Cryptographic Stamp Identifier from FIRS"},
+    {"fieldname": "submitted_at", "fieldtype": "Datetime", "label": "Submitted At", "read_only": 1},
+    {"fieldname": "payload_section", "fieldtype": "Section Break", "label": "API Payload / Response", "collapsible": 1},
+    {"fieldname": "payload", "fieldtype": "Code", "label": "Request Payload", "read_only": 1, "options": "JSON"},
+    {"fieldname": "col_break_payload", "fieldtype": "Column Break"},
+    {"fieldname": "response", "fieldtype": "Code", "label": "FIRS Response", "read_only": 1, "options": "JSON"},
+    {"fieldname": "error_section", "fieldtype": "Section Break", "label": "Error", "collapsible": 1, "depends_on": "eval:doc.error_message"},
+    {"fieldname": "error_message", "fieldtype": "Small Text", "label": "Error Message", "read_only": 1}
+  ],
+  "module": "Nigeria",
+  "name": "Nigeria E-Invoice",
+  "permissions": [
+    {"role": "Accounts User", "read": 1},
+    {"role": "Accounts Manager", "read": 1, "write": 1},
+    {"role": "System Manager", "read": 1, "write": 1, "delete": 1}
+  ],
+  "search_fields": "sales_invoice,irn,status",
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "title_field": "sales_invoice",
+  "track_changes": 1
+}

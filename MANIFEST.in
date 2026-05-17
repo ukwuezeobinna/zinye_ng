@@ -1,0 +1,2 @@
+include zinye_ng/fixtures/*.json
+recursive-include zinye_ng *.json *.js *.css *.html *.csv

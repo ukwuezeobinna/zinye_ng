@@ -1,0 +1,62 @@
+[
+  {
+    "doctype": "Income Tax Slab",
+    "name": "Nigeria PAYE 2026",
+    "effective_from": "2026-01-01",
+    "currency": "NGN",
+    "allow_tax_exemption": 0,
+    "standard_tax_exemption_amount": 0,
+    "slabs": [
+      {
+        "from_amount": 0,
+        "to_amount": 840000,
+        "percent_deduction": 0,
+        "condition": "",
+        "doctype": "Income Tax Slab Other Charges"
+      },
+      {
+        "from_amount": 800001,
+        "to_amount": 3000000,
+        "percent_deduction": 15,
+        "condition": "",
+        "doctype": "Income Tax Slab Other Charges"
+      },
+      {
+        "from_amount": 3000001,
+        "to_amount": 12000000,
+        "percent_deduction": 18,
+        "condition": "",
+        "doctype": "Income Tax Slab Other Charges"
+      },
+      {
+        "from_amount": 12000001,
+        "to_amount": 25000000,
+        "percent_deduction": 21,
+        "condition": "",
+        "doctype": "Income Tax Slab Other Charges"
+      },
+      {
+        "from_amount": 25000001,
+        "to_amount": 50000000,
+        "percent_deduction": 23,
+        "condition": "",
+        "doctype": "Income Tax Slab Other Charges"
+      },
+      {
+        "from_amount": 50000001,
+        "to_amount": 0,
+        "percent_deduction": 25,
+        "condition": "",
+        "doctype": "Income Tax Slab Other Charges"
+      }
+    ],
+    "other_taxes_and_charges": [
+      {
+        "description": "Minimum Wage Exemption (s.162(1)(t))",
+        "percent": -100,
+        "condition": "annual_taxable_earning <= 840000",
+        "doctype": "Income Tax Slab Other Charges"
+      }
+    ]
+  }
+]

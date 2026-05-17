@@ -1,0 +1,46 @@
+{
+  "actions": [],
+  "creation": "2026-01-01 00:00:00.000000",
+  "doctype": "DocType",
+  "document_type": "Document",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "enabled",
+    "environment",
+    "col_break_top",
+    "vat_number",
+    "business_place",
+    "business_device",
+    "credentials_section",
+    "client_id",
+    "client_secret",
+    "username",
+    "atrs_password"
+  ],
+  "fields": [
+    {"fieldname": "enabled", "fieldtype": "Check", "label": "Enabled", "default": "0"},
+    {"fieldname": "environment", "fieldtype": "Select", "label": "Environment", "options": "Development\nProduction", "default": "Development", "reqd": 1},
+    {"fieldname": "col_break_top", "fieldtype": "Column Break"},
+    {"fieldname": "vat_number", "fieldtype": "Data", "label": "VAT Number", "reqd": 1, "description": "Business VAT Registration Number"},
+    {"fieldname": "business_place", "fieldtype": "Data", "label": "Business Place Code", "reqd": 1, "description": "FIRS-assigned business location code"},
+    {"fieldname": "business_device", "fieldtype": "Data", "label": "Device Code", "reqd": 1, "description": "FIRS-assigned fiscal device identifier"},
+    {"fieldname": "credentials_section", "fieldtype": "Section Break", "label": "OAuth Credentials"},
+    {"fieldname": "client_id", "fieldtype": "Data", "label": "Client ID", "reqd": 1},
+    {"fieldname": "client_secret", "fieldtype": "Password", "label": "Client Secret", "reqd": 1},
+    {"fieldname": "username", "fieldtype": "Data", "label": "Username", "reqd": 1},
+    {"fieldname": "atrs_password", "fieldtype": "Password", "label": "Password", "reqd": 1}
+  ],
+  "icon": "fa fa-file-text",
+  "is_single": 1,
+  "issingle": 1,
+  "module": "Nigeria",
+  "name": "FIRS ATRS Settings",
+  "permissions": [
+    {"role": "Accounts Manager", "read": 1, "write": 1},
+    {"role": "System Manager", "read": 1, "write": 1}
+  ],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "track_changes": 1
+}

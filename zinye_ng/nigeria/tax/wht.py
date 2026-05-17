@@ -39,14 +39,25 @@ DEFAULT_WHT_RATES: dict[str, float] = {
 NON_RESIDENT_STARTUP_RATE = 5.0
 
 
+@frappe.whitelist()
+def get_supplier_wht_info(supplier: str) -> dict:
+    """
+    Return WHT category and default rate for a supplier.
+    Called from Purchase Invoice client script on supplier change.
+    """
+    category = frappe.db.get_value("Supplier", supplier, "ng_wht_category") or ""
+    rate = DEFAULT_WHT_RATES.get(category, 0.0)
+    return {"category": category, "rate": rate}
+
+
 def on_purchase_invoice_submit(doc, method=None):
     """
     Create WHT Journal Entry when Purchase Invoice is submitted.
 
-    Checks the custom_ng_wht_applicable flag set by the user on the invoice.
+    Checks ng_wht_applicable flag set by the user on the invoice.
     If applicable, computes WHT and creates a JE against the payable account.
     """
-    if not doc.get("custom_ng_wht_applicable"):
+    if not doc.get("ng_wht_applicable"):
         return
 
     wht_rate = _get_wht_rate(doc)
@@ -73,12 +84,12 @@ def _get_wht_rate(doc) -> float:
     Returns 0.0 if no rate can be determined.
     """
     # If the user explicitly set the rate on the invoice, use it
-    invoice_rate = flt(doc.get("custom_ng_wht_rate"))
+    invoice_rate = flt(doc.get("ng_wht_rate"))
     if invoice_rate > 0:
         return invoice_rate
 
     # Look up supplier's WHT category
-    wht_category = frappe.db.get_value("Supplier", doc.supplier, "custom_ng_wht_category")
+    wht_category = frappe.db.get_value("Supplier", doc.supplier, "ng_wht_category")
     if wht_category and wht_category in DEFAULT_WHT_RATES:
         return DEFAULT_WHT_RATES[wht_category]
 
@@ -91,8 +102,8 @@ def _update_invoice_wht_fields(doc, rate: float, amount: float):
         "Purchase Invoice",
         doc.name,
         {
-            "custom_ng_wht_rate": rate,
-            "custom_ng_wht_amount": amount,
+            "ng_wht_rate": rate,
+            "ng_wht_amount": amount,
         },
     )
 
@@ -105,7 +116,7 @@ def _create_wht_journal_entry(doc, wht_amount: float):
 
     This reduces the net disbursement to the supplier by the WHT amount.
     """
-    wht_account = doc.get("custom_ng_wht_account")
+    wht_account = doc.get("ng_wht_account")
     if not wht_account:
         # Try to find WHT payable account from company's chart of accounts
         wht_account = frappe.db.get_value(

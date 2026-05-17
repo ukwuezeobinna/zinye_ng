@@ -9,6 +9,13 @@ app_version = "0.1.0"
 required_apps = ["frappe", "erpnext", "hrms", "zinye_core"]
 
 # ---------------------------------------------------------------------------
+# Client-side scripts — auto-fill WHT fields on Purchase Invoice
+# ---------------------------------------------------------------------------
+doctype_js = {
+    "Purchase Invoice": "public/js/purchase_invoice.js",
+}
+
+# ---------------------------------------------------------------------------
 # App setup — adds Nigeria-specific custom fields on install
 # ---------------------------------------------------------------------------
 after_install = "zinye_ng.nigeria.setup.after_install"
@@ -21,10 +28,14 @@ before_uninstall = "zinye_ng.nigeria.setup.before_uninstall"
 fixtures = [
     # Nigeria Income Tax Slab (PAYE bands — Nigeria Tax Act 2025, effective 1 Jan 2026)
     {"dt": "Income Tax Slab", "filters": [["name", "in", ["Nigeria PAYE 2026"]]]},
-    # Salary Components: Pension, NHF, NHIS, NSITF, ITF, PAYE
+    # Salary Components: base earnings + statutory deductions
     {
         "dt": "Salary Component",
         "filters": [["name", "in", [
+            "NG - Basic Salary",
+            "NG - Housing Allowance",
+            "NG - Transport Allowance",
+            "NG - Pensionable Base",
             "NG - Pension Employee",
             "NG - Pension Employer",
             "NG - NHF",

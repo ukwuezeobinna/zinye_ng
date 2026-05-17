@@ -34,7 +34,7 @@ def poll_pending_einvoices():
             status = result.get("status") or result.get("Status")
             if status and status.lower() in ("cleared", "valid", "approved"):
                 frappe.db.set_value("Nigeria E-Invoice", record.name, "status", "Cleared")
-                frappe.db.set_value("Sales Invoice", record.sales_invoice, "custom_ng_firs_status", "Cleared")
+                frappe.db.set_value("Sales Invoice", record.sales_invoice, "ng_firs_status", "Cleared")
         except EInvoiceError as e:
             frappe.log_error(
                 f"IRN poll failed for {record.irn} (Sales Invoice {record.sales_invoice}): {e}",

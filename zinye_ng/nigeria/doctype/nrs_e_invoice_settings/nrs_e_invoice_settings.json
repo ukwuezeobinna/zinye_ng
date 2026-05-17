@@ -1,0 +1,97 @@
+{
+  "actions": [],
+  "creation": "2026-01-01 00:00:00.000000",
+  "doctype": "DocType",
+  "document_type": "Document",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "enabled",
+    "environment",
+    "col_break_top",
+    "sandbox_url",
+    "production_url",
+    "credentials_section",
+    "client_id",
+    "client_secret",
+    "api_key_section",
+    "api_key"
+  ],
+  "fields": [
+    {
+      "fieldname": "enabled",
+      "fieldtype": "Check",
+      "label": "Enabled",
+      "default": "0",
+      "description": "Enable FIRSMBS B2B e-invoicing. All Sales Invoices to VAT-registered customers will be submitted for pre-clearance."
+    },
+    {
+      "fieldname": "environment",
+      "fieldtype": "Select",
+      "label": "Environment",
+      "options": "Sandbox\nProduction",
+      "default": "Sandbox",
+      "reqd": 1
+    },
+    {
+      "fieldname": "col_break_top",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "sandbox_url",
+      "fieldtype": "Data",
+      "label": "Sandbox API Base URL",
+      "default": "https://api-sandbox.einvoice.firs.gov.ng",
+      "description": "Update after confirming the endpoint from the FIRSMBS developer portal."
+    },
+    {
+      "fieldname": "production_url",
+      "fieldtype": "Data",
+      "label": "Production API Base URL",
+      "default": "https://api.einvoice.firs.gov.ng",
+      "description": "Update after confirming the endpoint from the FIRSMBS developer portal."
+    },
+    {
+      "fieldname": "credentials_section",
+      "fieldtype": "Section Break",
+      "label": "OAuth 2.0 Credentials"
+    },
+    {
+      "fieldname": "client_id",
+      "fieldtype": "Data",
+      "label": "Client ID",
+      "reqd": 1,
+      "description": "Obtained after registering at https://einvoice.firs.gov.ng as a System Integrator."
+    },
+    {
+      "fieldname": "client_secret",
+      "fieldtype": "Password",
+      "label": "Client Secret",
+      "reqd": 1
+    },
+    {
+      "fieldname": "api_key_section",
+      "fieldtype": "Section Break",
+      "label": "API Key"
+    },
+    {
+      "fieldname": "api_key",
+      "fieldtype": "Password",
+      "label": "API Key",
+      "reqd": 1,
+      "description": "Sent as X-API-Key header on all requests. Issued at FIRSMBS developer portal registration."
+    }
+  ],
+  "icon": "fa fa-file-text",
+  "is_single": 1,
+  "issingle": 1,
+  "module": "Nigeria",
+  "name": "NRS E-Invoice Settings",
+  "permissions": [
+    {"role": "Accounts Manager", "read": 1, "write": 1},
+    {"role": "System Manager", "read": 1, "write": 1}
+  ],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "track_changes": 1
+}

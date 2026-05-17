@@ -180,5 +180,7 @@ def _log_atrs_submission(doc, result: dict):
     log.status = "Submitted" if result.get("payment_code") else "Failed"
     log.payment_code = result.get("payment_code", "")
     log.error_message = result.get("message", "") if not result.get("payment_code") else ""
+    if log.status == "Submitted":
+        log.submitted_at = now_datetime()
     log.insert(ignore_permissions=True)
     frappe.db.commit()

@@ -32,7 +32,11 @@ def retry_failed_submissions():
         try:
             result = submit_pos_invoice_to_atrs(log.document_name)
             if result.get("payment_code"):
-                frappe.db.set_value("NRS ATRS Log", log.name, "status", "Submitted")
+                frappe.db.set_value(
+                    "NRS ATRS Log",
+                    log.name,
+                    {"status": "Submitted", "submitted_at": now_datetime()},
+                )
         except ATRSError as e:
             frappe.log_error(
                 f"ATRS retry failed for POS Invoice {log.document_name}: {e}",

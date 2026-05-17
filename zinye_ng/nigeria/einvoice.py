@@ -25,10 +25,9 @@ import requests
 from frappe import _
 from frappe.utils import now_datetime
 
-# ── Mandatory once you have credentials ──────────────────────────────────────
-_SANDBOX_BASE = "https://api-sandbox.einvoice.firs.gov.ng"  # unconfirmed — update after registration
-_PROD_BASE = "https://api.einvoice.firs.gov.ng"             # unconfirmed — update after registration
-# ─────────────────────────────────────────────────────────────────────────────
+# Fallback URLs (overridden by the configurable fields in NRS E-Invoice Settings)
+_SANDBOX_BASE = "https://api-sandbox.einvoice.firs.gov.ng"
+_PROD_BASE = "https://api.einvoice.firs.gov.ng"
 
 _EINVOICE_SETTINGS_DOCTYPE = "NRS E-Invoice Settings"
 
@@ -68,7 +67,9 @@ def _get_token(settings) -> str:
 
 
 def _base_url(settings) -> str:
-    return _PROD_BASE if settings.environment == "Production" else _SANDBOX_BASE
+    if settings.environment == "Production":
+        return (settings.production_url or _PROD_BASE).rstrip("/")
+    return (settings.sandbox_url or _SANDBOX_BASE).rstrip("/")
 
 
 def build_invoice_payload(sales_invoice: str) -> dict[str, Any]:
@@ -91,10 +92,9 @@ def build_invoice_payload(sales_invoice: str) -> dict[str, Any]:
     """
     doc = frappe.get_doc("Sales Invoice", sales_invoice)
     company = frappe.get_doc("Company", doc.company)
-    customer = frappe.get_doc("Customer", doc.customer)
 
-    seller_tin = frappe.db.get_value("Company", doc.company, "tax_id") or ""
-    buyer_tin = frappe.db.get_value("Customer", doc.customer, "tax_id") or ""
+    seller_tin = frappe.db.get_value("Company", doc.company, "ng_tin") or ""
+    buyer_tin = frappe.db.get_value("Customer", doc.customer, "ng_tin") or ""
 
     items = []
     total_vat = 0.0
@@ -120,9 +120,9 @@ def build_invoice_payload(sales_invoice: str) -> dict[str, Any]:
     payload = {
         # Category 1: Business identifiers
         "sellerTIN": seller_tin,
-        "sellerRCNumber": getattr(company, "custom_rc_number", ""),
+        "sellerRCNumber": frappe.db.get_value("Company", doc.company, "ng_rc_number") or "",
         "buyerTIN": buyer_tin,
-        "buyerRCNumber": frappe.db.get_value("Customer", doc.customer, "custom_rc_number") or "",
+        "buyerRCNumber": frappe.db.get_value("Customer", doc.customer, "ng_rc_number") or "",
 
         # Category 2: Invoice details
         "invoiceNumber": doc.name,
@@ -134,8 +134,7 @@ def build_invoice_payload(sales_invoice: str) -> dict[str, Any]:
         # Category 3: Seller details
         "sellerName": doc.company,
         "sellerAddress": company.company_description or "",
-        "sellerState": getattr(company, "custom_state", ""),
-        "sellerLGA": getattr(company, "custom_lga", ""),
+        "sellerState": frappe.db.get_value("Company", doc.company, "ng_registered_state") or "",
 
         # Category 4: Buyer details
         "buyerName": doc.customer_name,
@@ -200,9 +199,9 @@ def submit_invoice(sales_invoice: str) -> dict[str, Any]:
 
     if irn:
         frappe.db.set_value("Sales Invoice", sales_invoice, {
-            "custom_firs_irn": irn,
-            "custom_firs_csid": csid,
-            "custom_firs_status": "Submitted",
+            "ng_firs_irn": irn,
+            "ng_firs_csid": csid,
+            "ng_firs_status": "Submitted",
         })
 
     return result

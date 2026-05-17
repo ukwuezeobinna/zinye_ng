@@ -17,7 +17,7 @@ from frappe.utils import now_datetime
 
 def on_sales_invoice_submit(doc, method=None):
     """Submit B2B invoice to FIRSMBS; flag B2C invoices for ATRS."""
-    buyer_tin = frappe.db.get_value("Customer", doc.customer, "custom_ng_tin") or ""
+    buyer_tin = frappe.db.get_value("Customer", doc.customer, "ng_tin") or ""
     if buyer_tin:
         # B2B — must go through FIRSMBS pre-clearance
         frappe.enqueue(

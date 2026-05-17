@@ -10,7 +10,7 @@
     "variable_based_on_taxable_salary": 0,
     "formula": "pension_employee_base * 0.08",
     "description": "Employee Pension Contribution: 8% of (Basic + Housing + Transport). PRA 2014 s.4(1). Exempt from PAYE (s.30 Nigeria Tax Act 2025).",
-    "custom_ng_component_type": "Pension (Employee)"
+    "ng_component_type": "Pension (Employee)"
   },
   {
     "doctype": "Salary Component",
@@ -23,7 +23,7 @@
     "variable_based_on_taxable_salary": 0,
     "formula": "pension_employee_base * 0.10",
     "description": "Employer Pension Contribution: 10% of (Basic + Housing + Transport). PRA 2014 s.4(1). Statistical — shown on slip, not part of net pay.",
-    "custom_ng_component_type": "Pension (Employer)"
+    "ng_component_type": "Pension (Employer)"
   },
   {
     "doctype": "Salary Component",
@@ -37,7 +37,7 @@
     "condition": "basic_salary >= 3000",
     "formula": "basic_salary * 0.025",
     "description": "National Housing Fund: 2.5% of basic salary. Exempt from PAYE (s.30). Exempted if basic < ₦3,000/month.",
-    "custom_ng_component_type": "NHF"
+    "ng_component_type": "NHF"
   },
   {
     "doctype": "Salary Component",
@@ -50,7 +50,7 @@
     "variable_based_on_taxable_salary": 0,
     "formula": "gross_pay * 0.05",
     "description": "National Health Insurance Scheme: 5% of gross. Exempt from PAYE (s.30 Nigeria Tax Act 2025).",
-    "custom_ng_component_type": "NHIS"
+    "ng_component_type": "NHIS"
   },
   {
     "doctype": "Salary Component",
@@ -63,7 +63,7 @@
     "variable_based_on_taxable_salary": 0,
     "formula": "gross_pay * 0.01",
     "description": "Nigeria Social Insurance Trust Fund: 1% of total emolument. Employer contribution — statistical only.",
-    "custom_ng_component_type": "NSITF"
+    "ng_component_type": "NSITF"
   },
   {
     "doctype": "Salary Component",
@@ -76,7 +76,7 @@
     "variable_based_on_taxable_salary": 0,
     "formula": "gross_pay * 0.01",
     "description": "Industrial Training Fund: 1% of annual payroll (annualised here). Applies if company has 5+ staff OR ₦50M+ annual payroll. Statistical only.",
-    "custom_ng_component_type": "ITF"
+    "ng_component_type": "ITF"
   },
   {
     "doctype": "Salary Component",
@@ -89,6 +89,6 @@
     "variable_based_on_taxable_salary": 1,
     "description": "Personal Income Tax (PAYE) — Nigeria Tax Act 2025, s.58 + Fourth Schedule. Computed from Nigeria PAYE 2026 Income Tax Slab.",
     "income_tax_component": 1,
-    "custom_ng_component_type": "PAYE"
+    "ng_component_type": "PAYE"
   }
 ]

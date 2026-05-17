@@ -1,5 +1,1 @@
-frappe
-erpnext
-hrms
-zinye_core
 requests

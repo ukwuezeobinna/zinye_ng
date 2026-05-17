@@ -6,7 +6,7 @@ with open("requirements.txt") as f:
 setup(
     name="zinye_ng",
     version="0.1.0",
-    description="Nigeria compliance for Zinye: PAYE, Pension, VAT, WHT, FIRS ATRS, FIRSMBS e-invoicing, NDPR",
+    description="Nigeria compliance for Zinye: PAYE, Pension, VAT, WHT, NRS ATRS, NRS MBS e-invoicing, NDPR",
     author="Zinye",
     author_email="dev@zinye.com",
     packages=find_packages(),

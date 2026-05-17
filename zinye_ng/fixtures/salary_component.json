@@ -2,6 +2,7 @@
   {
     "doctype": "Salary Component",
     "name": "NG - Pension Employee",
+    "salary_component": "NG - Pension Employee",
     "salary_component_abbr": "NG-PENS-EE",
     "type": "Deduction",
     "depends_on_payment_days": 0,
@@ -15,6 +16,7 @@
   {
     "doctype": "Salary Component",
     "name": "NG - Pension Employer",
+    "salary_component": "NG - Pension Employer",
     "salary_component_abbr": "NG-PENS-ER",
     "type": "Earning",
     "depends_on_payment_days": 0,
@@ -28,6 +30,7 @@
   {
     "doctype": "Salary Component",
     "name": "NG - NHF",
+    "salary_component": "NG - NHF",
     "salary_component_abbr": "NG-NHF",
     "type": "Deduction",
     "depends_on_payment_days": 0,
@@ -42,6 +45,7 @@
   {
     "doctype": "Salary Component",
     "name": "NG - NHIS",
+    "salary_component": "NG - NHIS",
     "salary_component_abbr": "NG-NHIS",
     "type": "Deduction",
     "depends_on_payment_days": 0,
@@ -55,6 +59,7 @@
   {
     "doctype": "Salary Component",
     "name": "NG - NSITF",
+    "salary_component": "NG - NSITF",
     "salary_component_abbr": "NG-NSITF",
     "type": "Earning",
     "depends_on_payment_days": 0,
@@ -68,6 +73,7 @@
   {
     "doctype": "Salary Component",
     "name": "NG - ITF",
+    "salary_component": "NG - ITF",
     "salary_component_abbr": "NG-ITF",
     "type": "Earning",
     "depends_on_payment_days": 0,
@@ -81,6 +87,7 @@
   {
     "doctype": "Salary Component",
     "name": "NG - PAYE Tax",
+    "salary_component": "NG - PAYE Tax",
     "salary_component_abbr": "NG-PAYE",
     "type": "Deduction",
     "depends_on_payment_days": 0,

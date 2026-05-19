@@ -105,13 +105,20 @@ def build_invoice_payload(sales_invoice: str) -> dict[str, Any]:
     company = frappe.get_doc("Company", doc.company)
     settings = _get_settings()
 
+    from zinye_ng.nigeria.constants.invoice_types import get_invoice_type_code, get_invoice_type_label
+
     seller_tin = (
         frappe.db.get_value("Company", doc.company, "ng_tin")
         or settings.tin
         or ""
     )
     buyer_tin = frappe.db.get_value("Customer", doc.customer, "ng_tin") or ""
-    invoice_type = "B2B" if buyer_tin else "B2C"
+    is_return = bool(doc.get("is_return"))
+    is_debit_note = bool(doc.get("is_debit_note"))
+    invoice_type_code = get_invoice_type_code("Sales Invoice", is_return, is_debit_note)
+    invoice_type_label = get_invoice_type_label(invoice_type_code)
+    # B2B/B2C is a separate buyer classification, distinct from the UBL invoice type code
+    buyer_type = "B2B" if buyer_tin else "B2C"
 
     vat_rate = settings.einvoice_default_vat_rate or 7.5
     items = []
@@ -143,7 +150,9 @@ def build_invoice_payload(sales_invoice: str) -> dict[str, Any]:
         "invoiceNumber": doc.name,
         "invoiceDate": str(doc.posting_date),
         "invoiceTime": now_datetime().strftime("%H:%M:%S"),
-        "invoiceType": invoice_type,
+        "invoiceTypeCode": invoice_type_code,       # UBL UN/ECE 1001 (e.g. "381")
+        "invoiceTypeDescription": invoice_type_label,  # e.g. "Commercial Invoice"
+        "buyerType": buyer_type,                    # "B2B" or "B2C" — separate from UBL type
         "currency": doc.currency or "NGN",
 
         # Category 3: Seller details
@@ -329,12 +338,19 @@ def _get_or_create_einvoice(sales_invoice: str):
     if name:
         return frappe.get_doc("Nigeria E-Invoice", name)
 
+    from zinye_ng.nigeria.constants.invoice_types import get_invoice_type_code
+
     inv = frappe.get_doc("Sales Invoice", sales_invoice)
     buyer_tin = frappe.db.get_value("Customer", inv.customer, "ng_tin") or ""
+    type_code = get_invoice_type_code(
+        "Sales Invoice",
+        bool(inv.get("is_return")),
+        bool(inv.get("is_debit_note")),
+    )
     doc = frappe.new_doc("Nigeria E-Invoice")
     doc.sales_invoice = sales_invoice
     doc.status = "Pending"
-    doc.invoice_type = "B2B" if buyer_tin else "B2C"
+    doc.invoice_type = type_code  # UBL code e.g. "381"
     doc.invoice_number = sales_invoice
     doc.invoice_date = inv.posting_date
     doc.seller_tin = frappe.db.get_value("Company", inv.company, "ng_tin") or ""

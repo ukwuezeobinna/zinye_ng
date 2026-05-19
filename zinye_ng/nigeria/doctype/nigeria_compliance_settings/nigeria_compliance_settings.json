@@ -1,394 +1,385 @@
 {
-  "actions": [
-    {
-      "action": "Submit",
-      "action_label": "Save Settings"
-    }
-  ],
-  "creation": "2026-01-01 00:00:00.000000",
-  "doctype": "DocType",
-  "document_type": "Document",
-  "editable_grid": 1,
-  "engine": "InnoDB",
-  "field_order": [
-    "general_tab",
-    "company",
-    "tin",
-    "col_break_company",
-    "vat_registration_number",
-    "rc_number",
-    "registered_state",
-    "accounts_section",
-    "output_vat_account",
-    "wht_payable_account",
-    "col_break_accounts",
-    "input_vat_account",
-    "wht_receivable_account",
-    "einvoice_tab",
-    "einvoice_enabled",
-    "einvoice_auto_submit",
-    "einvoice_b2b_only",
-    "col_break_einvoice_flags",
-    "einvoice_environment",
-    "einvoice_default_vat_rate",
-    "einvoice_endpoints_section",
-    "einvoice_sandbox_url",
-    "col_break_einvoice_urls",
-    "einvoice_production_url",
-    "einvoice_credentials_section",
-    "einvoice_client_id",
-    "einvoice_client_secret",
-    "col_break_einvoice_creds",
-    "einvoice_api_key",
-    "einvoice_token_expiry",
-    "atrs_tab",
-    "atrs_enabled",
-    "atrs_auto_submit",
-    "col_break_atrs_flags",
-    "atrs_environment",
-    "atrs_identity_section",
-    "atrs_vat_number",
-    "atrs_business_place",
-    "col_break_atrs_identity",
-    "atrs_business_device",
-    "atrs_credentials_section",
-    "atrs_client_id",
-    "atrs_client_secret",
-    "col_break_atrs_creds",
-    "atrs_username",
-    "atrs_password",
-    "payroll_tab",
-    "payroll_settings_link",
-    "payroll_settings_html"
-  ],
-  "fields": [
-    {
-      "fieldname": "general_tab",
-      "fieldtype": "Tab Break",
-      "label": "General"
-    },
-    {
-      "fieldname": "company",
-      "fieldtype": "Link",
-      "label": "Company",
-      "options": "Company",
-      "description": "Primary company for Nigeria compliance. TIN and VAT number are pulled from the Company record.",
-      "in_list_view": 1
-    },
-    {
-      "fieldname": "tin",
-      "fieldtype": "Data",
-      "label": "TIN (Tax Identification Number)",
-      "description": "12-digit NRS Tax Identification Number. Leave blank to auto-read from Company.",
-      "length": 20
-    },
-    {
-      "fieldname": "col_break_company",
-      "fieldtype": "Column Break"
-    },
-    {
-      "fieldname": "vat_registration_number",
-      "fieldtype": "Data",
-      "label": "VAT Registration Number",
-      "description": "FIRS-issued VAT registration number. Required for e-Invoice and ATRS."
-    },
-    {
-      "fieldname": "rc_number",
-      "fieldtype": "Data",
-      "label": "RC Number (CAC)",
-      "description": "Corporate Affairs Commission registration number."
-    },
-    {
-      "fieldname": "registered_state",
-      "fieldtype": "Select",
-      "label": "Registered State",
-      "options": "\nAbia\nAdamawa\nAkwa Ibom\nAnambra\nBauchi\nBayelsa\nBenue\nBorno\nCross River\nDelta\nEbonyi\nEdo\nEkiti\nEnugu\nFCT\nGombe\nImo\nJigawa\nKaduna\nKano\nKatsina\nKebbi\nKogi\nKwara\nLagos\nNasarawa\nNiger\nOgun\nOndo\nOsun\nOyo\nPlateau\nRivers\nSokoto\nTaraba\nYobe\nZamfara",
-      "description": "State where PAYE is remitted to the relevant State IRS."
-    },
-    {
-      "fieldname": "accounts_section",
-      "fieldtype": "Section Break",
-      "label": "Tax Accounts"
-    },
-    {
-      "fieldname": "output_vat_account",
-      "fieldtype": "Link",
-      "label": "Output VAT Account",
-      "options": "Account",
-      "description": "Account credited when VAT is charged on sales."
-    },
-    {
-      "fieldname": "wht_payable_account",
-      "fieldtype": "Link",
-      "label": "WHT Payable Account",
-      "options": "Account",
-      "description": "Account credited when WHT is deducted from supplier payments."
-    },
-    {
-      "fieldname": "col_break_accounts",
-      "fieldtype": "Column Break"
-    },
-    {
-      "fieldname": "input_vat_account",
-      "fieldtype": "Link",
-      "label": "Input VAT Account",
-      "options": "Account",
-      "description": "Account debited when VAT is paid on purchases."
-    },
-    {
-      "fieldname": "wht_receivable_account",
-      "fieldtype": "Link",
-      "label": "WHT Receivable Account",
-      "options": "Account",
-      "description": "Account debited when WHT is deducted from our receipts."
-    },
-    {
-      "fieldname": "einvoice_tab",
-      "fieldtype": "Tab Break",
-      "label": "e-Invoice (FIRSMBS)"
-    },
-    {
-      "fieldname": "einvoice_enabled",
-      "fieldtype": "Check",
-      "label": "Enable FIRSMBS e-Invoicing",
-      "default": "0",
-      "description": "All submitted Sales Invoices to VAT-registered buyers will be sent to NRS FIRSMBS for pre-clearance."
-    },
-    {
-      "fieldname": "einvoice_auto_submit",
-      "fieldtype": "Check",
-      "label": "Auto-Submit on Invoice Submission",
-      "default": "1",
-      "depends_on": "eval:doc.einvoice_enabled",
-      "description": "Automatically enqueue FIRSMBS submission when a Sales Invoice is submitted. Disable to submit manually."
-    },
-    {
-      "fieldname": "einvoice_b2b_only",
-      "fieldtype": "Check",
-      "label": "B2B Only (skip invoices without buyer TIN)",
-      "default": "1",
-      "depends_on": "eval:doc.einvoice_enabled",
-      "description": "Only submit invoices where the customer has a TIN. Uncheck to submit all invoices including B2C."
-    },
-    {
-      "fieldname": "col_break_einvoice_flags",
-      "fieldtype": "Column Break"
-    },
-    {
-      "fieldname": "einvoice_environment",
-      "fieldtype": "Select",
-      "label": "Environment",
-      "options": "Sandbox\nProduction",
-      "default": "Sandbox",
-      "reqd": 1,
-      "depends_on": "eval:doc.einvoice_enabled"
-    },
-    {
-      "fieldname": "einvoice_default_vat_rate",
-      "fieldtype": "Percent",
-      "label": "Default VAT Rate (%)",
-      "default": "7.5",
-      "depends_on": "eval:doc.einvoice_enabled",
-      "description": "Nigeria standard VAT rate per Finance Act 2019."
-    },
-    {
-      "fieldname": "einvoice_endpoints_section",
-      "fieldtype": "Section Break",
-      "label": "API Endpoints",
-      "depends_on": "eval:doc.einvoice_enabled"
-    },
-    {
-      "fieldname": "einvoice_sandbox_url",
-      "fieldtype": "Data",
-      "label": "Sandbox Base URL",
-      "default": "https://api-sandbox.einvoice.firs.gov.ng",
-      "description": "Sandbox endpoint from NRS FIRSMBS developer portal."
-    },
-    {
-      "fieldname": "col_break_einvoice_urls",
-      "fieldtype": "Column Break"
-    },
-    {
-      "fieldname": "einvoice_production_url",
-      "fieldtype": "Data",
-      "label": "Production Base URL",
-      "default": "https://api.einvoice.firs.gov.ng",
-      "description": "Production endpoint from NRS FIRSMBS developer portal."
-    },
-    {
-      "fieldname": "einvoice_credentials_section",
-      "fieldtype": "Section Break",
-      "label": "OAuth 2.0 Credentials",
-      "depends_on": "eval:doc.einvoice_enabled"
-    },
-    {
-      "fieldname": "einvoice_client_id",
-      "fieldtype": "Data",
-      "label": "Client ID",
-      "description": "Issued after registering as a System Integrator at einvoice.firs.gov.ng."
-    },
-    {
-      "fieldname": "einvoice_client_secret",
-      "fieldtype": "Password",
-      "label": "Client Secret"
-    },
-    {
-      "fieldname": "col_break_einvoice_creds",
-      "fieldtype": "Column Break"
-    },
-    {
-      "fieldname": "einvoice_api_key",
-      "fieldtype": "Password",
-      "label": "API Key",
-      "description": "Sent as X-API-Key header. Issued at FIRSMBS developer portal."
-    },
-    {
-      "fieldname": "einvoice_token_expiry",
-      "fieldtype": "Datetime",
-      "label": "Token Expiry",
-      "read_only": 1,
-      "description": "Auto-updated when token is refreshed."
-    },
-    {
-      "fieldname": "atrs_tab",
-      "fieldtype": "Tab Break",
-      "label": "ATRS (POS / B2C)"
-    },
-    {
-      "fieldname": "atrs_enabled",
-      "fieldtype": "Check",
-      "label": "Enable FIRS ATRS",
-      "default": "0",
-      "description": "Enable Automated Tax Remittance System for B2C POS receipts."
-    },
-    {
-      "fieldname": "atrs_auto_submit",
-      "fieldtype": "Check",
-      "label": "Auto-Submit POS Invoices",
-      "default": "1",
-      "depends_on": "eval:doc.atrs_enabled",
-      "description": "Automatically submit POS Invoices to ATRS on submission."
-    },
-    {
-      "fieldname": "col_break_atrs_flags",
-      "fieldtype": "Column Break"
-    },
-    {
-      "fieldname": "atrs_environment",
-      "fieldtype": "Select",
-      "label": "Environment",
-      "options": "Development\nProduction",
-      "default": "Development",
-      "reqd": 1,
-      "depends_on": "eval:doc.atrs_enabled"
-    },
-    {
-      "fieldname": "atrs_identity_section",
-      "fieldtype": "Section Break",
-      "label": "Business Identity",
-      "depends_on": "eval:doc.atrs_enabled"
-    },
-    {
-      "fieldname": "atrs_vat_number",
-      "fieldtype": "Data",
-      "label": "VAT Number",
-      "description": "Business VAT Registration Number registered with FIRS ATRS."
-    },
-    {
-      "fieldname": "atrs_business_place",
-      "fieldtype": "Data",
-      "label": "Business Place Code",
-      "description": "NRS-assigned business location identifier."
-    },
-    {
-      "fieldname": "col_break_atrs_identity",
-      "fieldtype": "Column Break"
-    },
-    {
-      "fieldname": "atrs_business_device",
-      "fieldtype": "Data",
-      "label": "Device Code",
-      "description": "NRS-assigned fiscal device identifier."
-    },
-    {
-      "fieldname": "atrs_credentials_section",
-      "fieldtype": "Section Break",
-      "label": "OAuth Credentials",
-      "depends_on": "eval:doc.atrs_enabled"
-    },
-    {
-      "fieldname": "atrs_client_id",
-      "fieldtype": "Data",
-      "label": "Client ID"
-    },
-    {
-      "fieldname": "atrs_client_secret",
-      "fieldtype": "Password",
-      "label": "Client Secret"
-    },
-    {
-      "fieldname": "col_break_atrs_creds",
-      "fieldtype": "Column Break"
-    },
-    {
-      "fieldname": "atrs_username",
-      "fieldtype": "Data",
-      "label": "Username"
-    },
-    {
-      "fieldname": "atrs_password",
-      "fieldtype": "Password",
-      "label": "Password"
-    },
-    {
-      "fieldname": "payroll_tab",
-      "fieldtype": "Tab Break",
-      "label": "Payroll"
-    },
-    {
-      "fieldname": "payroll_settings_link",
-      "fieldtype": "Button",
-      "label": "Open Nigeria Payroll Settings",
-      "description": "PAYE bands, pension rates, NHF, NHIS, NSITF configuration."
-    },
-    {
-      "fieldname": "payroll_settings_html",
-      "fieldtype": "HTML",
-      "label": "Payroll Settings",
-      "options": "<p class='text-muted'>Nigeria payroll statutory rates (PAYE, Pension, NHF, NHIS, NSITF, ITF) are configured in <a href='/app/nigeria-payroll-settings'>Nigeria Payroll Settings</a>.</p>"
-    },
-    {
-      "fieldname": "is_retry_einvoice_pending",
-      "fieldtype": "Check",
-      "label": "Is e-Invoice Retry Pending",
-      "hidden": 1,
-      "default": "0",
-      "description": "Internal flag. Set to 1 when a server-side FIRSMBS error occurs. Cleared by the retry cron job."
-    }
-  ],
-  "icon": "tax",
-  "is_single": 1,
-  "issingle": 1,
-  "module": "Nigeria",
-  "name": "Nigeria Compliance Settings",
-  "permissions": [
-    {
-      "role": "Accounts Manager",
-      "read": 1,
-      "write": 1
-    },
-    {
-      "role": "HR Manager",
-      "read": 1,
-      "write": 0
-    },
-    {
-      "role": "System Manager",
-      "read": 1,
-      "write": 1
-    }
-  ],
-  "sort_field": "modified",
-  "sort_order": "DESC",
-  "track_changes": 1
+ "actions": [
+  {
+   "action": "Submit",
+   "action_label": "Save Settings"
+  }
+ ],
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "general_tab",
+  "company",
+  "tin",
+  "col_break_company",
+  "vat_registration_number",
+  "rc_number",
+  "registered_state",
+  "accounts_section",
+  "output_vat_account",
+  "wht_payable_account",
+  "col_break_accounts",
+  "input_vat_account",
+  "wht_receivable_account",
+  "einvoice_tab",
+  "einvoice_enabled",
+  "einvoice_auto_submit",
+  "einvoice_b2b_only",
+  "col_break_einvoice_flags",
+  "einvoice_environment",
+  "einvoice_default_vat_rate",
+  "einvoice_endpoints_section",
+  "einvoice_sandbox_url",
+  "col_break_einvoice_urls",
+  "einvoice_production_url",
+  "einvoice_credentials_section",
+  "col_break_einvoice_creds",
+  "einvoice_business_id",
+  "einvoice_api_key",
+  "einvoice_api_secret",
+  "atrs_tab",
+  "atrs_enabled",
+  "atrs_auto_submit",
+  "col_break_atrs_flags",
+  "atrs_environment",
+  "atrs_identity_section",
+  "atrs_vat_number",
+  "atrs_business_place",
+  "col_break_atrs_identity",
+  "atrs_business_device",
+  "atrs_credentials_section",
+  "atrs_client_id",
+  "atrs_client_secret",
+  "col_break_atrs_creds",
+  "atrs_username",
+  "atrs_password",
+  "payroll_tab",
+  "payroll_settings_link",
+  "payroll_settings_html"
+ ],
+ "fields": [
+  {
+   "fieldname": "general_tab",
+   "fieldtype": "Tab Break",
+   "label": "General"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "description": "Primary company for Nigeria compliance. TIN and VAT number are pulled from the Company record.",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "tin",
+   "fieldtype": "Data",
+   "label": "TIN (Tax Identification Number)",
+   "description": "12-digit NRS Tax Identification Number. Leave blank to auto-read from Company.",
+   "length": 20
+  },
+  {
+   "fieldname": "col_break_company",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "vat_registration_number",
+   "fieldtype": "Data",
+   "label": "VAT Registration Number",
+   "description": "FIRS-issued VAT registration number. Required for e-Invoice and ATRS."
+  },
+  {
+   "fieldname": "rc_number",
+   "fieldtype": "Data",
+   "label": "RC Number (CAC)",
+   "description": "Corporate Affairs Commission registration number."
+  },
+  {
+   "fieldname": "registered_state",
+   "fieldtype": "Select",
+   "label": "Registered State",
+   "options": "\nAbia\nAdamawa\nAkwa Ibom\nAnambra\nBauchi\nBayelsa\nBenue\nBorno\nCross River\nDelta\nEbonyi\nEdo\nEkiti\nEnugu\nFCT\nGombe\nImo\nJigawa\nKaduna\nKano\nKatsina\nKebbi\nKogi\nKwara\nLagos\nNasarawa\nNiger\nOgun\nOndo\nOsun\nOyo\nPlateau\nRivers\nSokoto\nTaraba\nYobe\nZamfara",
+   "description": "State where PAYE is remitted to the relevant State IRS."
+  },
+  {
+   "fieldname": "accounts_section",
+   "fieldtype": "Section Break",
+   "label": "Tax Accounts"
+  },
+  {
+   "fieldname": "output_vat_account",
+   "fieldtype": "Link",
+   "label": "Output VAT Account",
+   "options": "Account",
+   "description": "Account credited when VAT is charged on sales."
+  },
+  {
+   "fieldname": "wht_payable_account",
+   "fieldtype": "Link",
+   "label": "WHT Payable Account",
+   "options": "Account",
+   "description": "Account credited when WHT is deducted from supplier payments."
+  },
+  {
+   "fieldname": "col_break_accounts",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "input_vat_account",
+   "fieldtype": "Link",
+   "label": "Input VAT Account",
+   "options": "Account",
+   "description": "Account debited when VAT is paid on purchases."
+  },
+  {
+   "fieldname": "wht_receivable_account",
+   "fieldtype": "Link",
+   "label": "WHT Receivable Account",
+   "options": "Account",
+   "description": "Account debited when WHT is deducted from our receipts."
+  },
+  {
+   "fieldname": "einvoice_tab",
+   "fieldtype": "Tab Break",
+   "label": "e-Invoice (FIRSMBS)"
+  },
+  {
+   "fieldname": "einvoice_enabled",
+   "fieldtype": "Check",
+   "label": "Enable FIRSMBS e-Invoicing",
+   "default": "0",
+   "description": "All submitted Sales Invoices to VAT-registered buyers will be sent to NRS FIRSMBS for pre-clearance."
+  },
+  {
+   "fieldname": "einvoice_auto_submit",
+   "fieldtype": "Check",
+   "label": "Auto-Submit on Invoice Submission",
+   "default": "1",
+   "depends_on": "eval:doc.einvoice_enabled",
+   "description": "Automatically enqueue FIRSMBS submission when a Sales Invoice is submitted. Disable to submit manually."
+  },
+  {
+   "fieldname": "einvoice_b2b_only",
+   "fieldtype": "Check",
+   "label": "B2B Only (skip invoices without buyer TIN)",
+   "default": "1",
+   "depends_on": "eval:doc.einvoice_enabled",
+   "description": "Only submit invoices where the customer has a TIN. Uncheck to submit all invoices including B2C."
+  },
+  {
+   "fieldname": "col_break_einvoice_flags",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "einvoice_environment",
+   "fieldtype": "Select",
+   "label": "Environment",
+   "options": "Sandbox\nProduction",
+   "default": "Sandbox",
+   "reqd": 1,
+   "depends_on": "eval:doc.einvoice_enabled"
+  },
+  {
+   "fieldname": "einvoice_default_vat_rate",
+   "fieldtype": "Percent",
+   "label": "Default VAT Rate (%)",
+   "default": "7.5",
+   "depends_on": "eval:doc.einvoice_enabled",
+   "description": "Nigeria standard VAT rate per Finance Act 2019."
+  },
+  {
+   "fieldname": "einvoice_endpoints_section",
+   "fieldtype": "Section Break",
+   "label": "API Endpoints",
+   "depends_on": "eval:doc.einvoice_enabled"
+  },
+  {
+   "fieldname": "einvoice_sandbox_url",
+   "fieldtype": "Data",
+   "label": "Sandbox Base URL",
+   "default": "https://api-sandbox.einvoice.firs.gov.ng",
+   "description": "Sandbox endpoint from NRS FIRSMBS developer portal."
+  },
+  {
+   "fieldname": "col_break_einvoice_urls",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "einvoice_production_url",
+   "fieldtype": "Data",
+   "label": "Production Base URL",
+   "default": "https://api.einvoice.firs.gov.ng",
+   "description": "Production endpoint from NRS FIRSMBS developer portal."
+  },
+  {
+   "fieldname": "einvoice_credentials_section",
+   "fieldtype": "Section Break",
+   "label": "OAuth 2.0 Credentials",
+   "depends_on": "eval:doc.einvoice_enabled"
+  },
+  {
+   "fieldname": "col_break_einvoice_creds",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "einvoice_business_id",
+   "fieldtype": "Data",
+   "label": "FIRS Business ID",
+   "description": "The business_id assigned by FIRS when you register as a taxpayer (UUID format)"
+  },
+  {
+   "fieldname": "einvoice_api_key",
+   "fieldtype": "Password",
+   "label": "API Key (x-api-key)"
+  },
+  {
+   "fieldname": "einvoice_api_secret",
+   "fieldtype": "Password",
+   "label": "API Secret (x-api-secret)"
+  },
+  {
+   "fieldname": "atrs_tab",
+   "fieldtype": "Tab Break",
+   "label": "ATRS (POS / B2C)"
+  },
+  {
+   "fieldname": "atrs_enabled",
+   "fieldtype": "Check",
+   "label": "Enable FIRS ATRS",
+   "default": "0",
+   "description": "Enable Automated Tax Remittance System for B2C POS receipts."
+  },
+  {
+   "fieldname": "atrs_auto_submit",
+   "fieldtype": "Check",
+   "label": "Auto-Submit POS Invoices",
+   "default": "1",
+   "depends_on": "eval:doc.atrs_enabled",
+   "description": "Automatically submit POS Invoices to ATRS on submission."
+  },
+  {
+   "fieldname": "col_break_atrs_flags",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "atrs_environment",
+   "fieldtype": "Select",
+   "label": "Environment",
+   "options": "Development\nProduction",
+   "default": "Development",
+   "reqd": 1,
+   "depends_on": "eval:doc.atrs_enabled"
+  },
+  {
+   "fieldname": "atrs_identity_section",
+   "fieldtype": "Section Break",
+   "label": "Business Identity",
+   "depends_on": "eval:doc.atrs_enabled"
+  },
+  {
+   "fieldname": "atrs_vat_number",
+   "fieldtype": "Data",
+   "label": "VAT Number",
+   "description": "Business VAT Registration Number registered with FIRS ATRS."
+  },
+  {
+   "fieldname": "atrs_business_place",
+   "fieldtype": "Data",
+   "label": "Business Place Code",
+   "description": "NRS-assigned business location identifier."
+  },
+  {
+   "fieldname": "col_break_atrs_identity",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "atrs_business_device",
+   "fieldtype": "Data",
+   "label": "Device Code",
+   "description": "NRS-assigned fiscal device identifier."
+  },
+  {
+   "fieldname": "atrs_credentials_section",
+   "fieldtype": "Section Break",
+   "label": "OAuth Credentials",
+   "depends_on": "eval:doc.atrs_enabled"
+  },
+  {
+   "fieldname": "atrs_client_id",
+   "fieldtype": "Data",
+   "label": "Client ID"
+  },
+  {
+   "fieldname": "atrs_client_secret",
+   "fieldtype": "Password",
+   "label": "Client Secret"
+  },
+  {
+   "fieldname": "col_break_atrs_creds",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "atrs_username",
+   "fieldtype": "Data",
+   "label": "Username"
+  },
+  {
+   "fieldname": "atrs_password",
+   "fieldtype": "Password",
+   "label": "Password"
+  },
+  {
+   "fieldname": "payroll_tab",
+   "fieldtype": "Tab Break",
+   "label": "Payroll"
+  },
+  {
+   "fieldname": "payroll_settings_link",
+   "fieldtype": "Button",
+   "label": "Open Nigeria Payroll Settings",
+   "description": "PAYE bands, pension rates, NHF, NHIS, NSITF configuration."
+  },
+  {
+   "fieldname": "payroll_settings_html",
+   "fieldtype": "HTML",
+   "label": "Payroll Settings",
+   "options": "<p class='text-muted'>Nigeria payroll statutory rates (PAYE, Pension, NHF, NHIS, NSITF, ITF) are configured in <a href='/app/nigeria-payroll-settings'>Nigeria Payroll Settings</a>.</p>"
+  },
+  {
+   "fieldname": "is_retry_einvoice_pending",
+   "fieldtype": "Check",
+   "label": "Is e-Invoice Retry Pending",
+   "hidden": 1,
+   "default": "0",
+   "description": "Internal flag. Set to 1 when a server-side FIRSMBS error occurs. Cleared by the retry cron job."
+  }
+ ],
+ "icon": "tax",
+ "is_single": 1,
+ "issingle": 1,
+ "module": "Nigeria",
+ "name": "Nigeria Compliance Settings",
+ "permissions": [
+  {
+   "role": "Accounts Manager",
+   "read": 1,
+   "write": 1
+  },
+  {
+   "role": "HR Manager",
+   "read": 1,
+   "write": 0
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
 }

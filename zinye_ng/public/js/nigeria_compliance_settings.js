@@ -1,6 +1,6 @@
 frappe.ui.form.on("Nigeria Compliance Settings", {
 	refresh(frm) {
-		if (frm.doc.einvoice_client_id) {
+		if (frm.doc.einvoice_api_key) {
 			frm.add_custom_button(__("Test FIRSMBS Connection"), () => {
 				frappe.show_alert({ message: __("Testing FIRSMBS connection..."), indicator: "blue" });
 				frm.call("test_einvoice_connection").then(r => {

@@ -22,7 +22,7 @@ from __future__ import annotations
 import frappe
 import requests
 
-from zinye_ng.nigeria.firs.einvoice import _base_url, _headers, _get_settings
+from zinye_ng.nigeria.firs.einvoice import _base_url, _headers, _get_settings  # noqa: E402
 
 _CACHE_TTL = 86400  # 24 hours
 

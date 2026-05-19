@@ -43,6 +43,26 @@ class NigeriaSalesInvoiceMixin:
         return cancel_invoice(self.name)
 
     @frappe.whitelist()
+    def transmit_einvoice(self) -> dict:
+        """Transmit signed invoice to buyer via FIRS network."""
+        from zinye_ng.nigeria.firs.einvoice import transmit_invoice
+
+        irn = self.get("ng_firs_irn")
+        if not irn:
+            frappe.throw(_("No IRN found. Submit to FIRS first."))
+        return transmit_invoice(irn)
+
+    @frappe.whitelist()
+    def mark_firs_paid(self, reference: str = "") -> dict:
+        """Update FIRS payment status to PAID."""
+        from zinye_ng.nigeria.firs.einvoice import update_payment_status
+
+        irn = self.get("ng_firs_irn")
+        if not irn:
+            frappe.throw(_("No IRN found on this invoice."))
+        return update_payment_status(irn, "PAID", reference or self.name)
+
+    @frappe.whitelist()
     def get_einvoice_status(self) -> dict:
         """Return the current Nigeria E-Invoice status for this Sales Invoice."""
         record = frappe.db.get_value(

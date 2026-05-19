@@ -131,6 +131,39 @@ def _get_custom_fields():
                 "description": "Tick if company has 5+ employees OR ₦50M+ annual payroll",
                 "default": "1",
             },
+            {
+                "fieldname": "ng_firs_business_id",
+                "label": "FIRS Business ID",
+                "fieldtype": "Data",
+                "insert_after": "ng_itf_liable",
+                "description": "UUID assigned by FIRS when registering on the e-Invoice portal (used in API calls)",
+            },
+            {
+                "fieldname": "ng_firs_address_section",
+                "label": "FIRS Postal Address",
+                "fieldtype": "Section Break",
+                "insert_after": "ng_firs_business_id",
+                "collapsible": 1,
+            },
+            {
+                "fieldname": "ng_address",
+                "label": "Street Address",
+                "fieldtype": "Data",
+                "insert_after": "ng_firs_address_section",
+                "description": "Street address sent in FIRS UBL e-invoice payload",
+            },
+            {
+                "fieldname": "ng_city",
+                "label": "City",
+                "fieldtype": "Data",
+                "insert_after": "ng_address",
+            },
+            {
+                "fieldname": "ng_postal_code",
+                "label": "Postal Code",
+                "fieldtype": "Data",
+                "insert_after": "ng_city",
+            },
         ],
 
         # ── Employee ──────────────────────────────────────────────────────────
@@ -256,9 +289,43 @@ def _get_custom_fields():
                 "label": "NRS Status",
                 "fieldtype": "Select",
                 "insert_after": "ng_firs_csid",
-                "options": "Not Required\nPending\nSubmitted\nCleared\nFailed",
+                "options": "Not Required\nPending\nSubmitted\nCleared\nAuto-Retry\nFailed\nCancelled",
                 "default": "Not Required",
                 "read_only": 1,
+            },
+        ],
+
+        # ── Item ──────────────────────────────────────────────────────────────
+        "Item": [
+            {
+                "fieldname": "ng_firs_section",
+                "label": "FIRS Classification",
+                "fieldtype": "Section Break",
+                "insert_after": "item_group",
+                "collapsible": 1,
+            },
+            {
+                "fieldname": "ng_hs_code",
+                "label": "HS Code",
+                "fieldtype": "Link",
+                "options": "Nigeria FIRS HS Code",
+                "insert_after": "ng_firs_section",
+                "description": "FIRS Harmonized System product code — required for goods in e-invoices",
+            },
+            {
+                "fieldname": "ng_service_code",
+                "label": "Service Code",
+                "fieldtype": "Link",
+                "options": "Nigeria FIRS Service Code",
+                "insert_after": "ng_hs_code",
+                "description": "FIRS service code — required for service items in e-invoices",
+            },
+            {
+                "fieldname": "ng_product_category",
+                "label": "FIRS Product Category",
+                "fieldtype": "Data",
+                "insert_after": "ng_service_code",
+                "description": "FIRS product/service category code sent in UBL invoice line",
             },
         ],
 

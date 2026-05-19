@@ -148,8 +148,13 @@ def build_invoice_payload(sales_invoice: str, irn: str) -> dict[str, Any]:
         total_vat += line_vat
         total_line_extension += net
 
-        hs_code = frappe.db.get_value("Item", row.item_code, "ng_hs_code") or ""
-        product_category = frappe.db.get_value("Item", row.item_code, "ng_product_category") or ""
+        item_fields = frappe.db.get_value(
+            "Item", row.item_code,
+            ["ng_hs_code", "ng_service_code", "ng_product_category"],
+            as_dict=True,
+        ) or {}
+        hs_code = item_fields.get("ng_hs_code") or item_fields.get("ng_service_code") or ""
+        product_category = item_fields.get("ng_product_category") or ""
         quantity_code = get_quantity_code(row.uom or "")
 
         invoice_lines.append({

@@ -1,0 +1,115 @@
+{
+  "content": "[{\"id\":\"settings_card\",\"type\":\"card\",\"data\":{\"card_name\":\"Settings\",\"col\":4}},{\"id\":\"einvoice_card\",\"type\":\"card\",\"data\":{\"card_name\":\"e-Invoice & ATRS\",\"col\":4}},{\"id\":\"reports_card\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}},{\"id\":\"ndpr_card\",\"type\":\"card\",\"data\":{\"card_name\":\"NDPR\",\"col\":4}}]",
+  "doctype": "Workspace",
+  "extends": null,
+  "icon": "tax",
+  "is_standard": 1,
+  "label": "Nigeria",
+  "links": [
+    {
+      "hidden": 0,
+      "is_query_report": 0,
+      "label": "Nigeria Compliance Settings",
+      "link_count": 0,
+      "link_to": "Nigeria Compliance Settings",
+      "link_type": "DocType",
+      "onboard": 1,
+      "parent_label": "Settings",
+      "type": "Link"
+    },
+    {
+      "hidden": 0,
+      "is_query_report": 0,
+      "label": "Nigeria Payroll Settings",
+      "link_count": 0,
+      "link_to": "Nigeria Payroll Settings",
+      "link_type": "DocType",
+      "onboard": 1,
+      "parent_label": "Settings",
+      "type": "Link"
+    },
+    {
+      "hidden": 0,
+      "is_query_report": 0,
+      "label": "Nigeria E-Invoice",
+      "link_count": 0,
+      "link_to": "Nigeria E-Invoice",
+      "link_type": "DocType",
+      "onboard": 1,
+      "parent_label": "e-Invoice & ATRS",
+      "type": "Link"
+    },
+    {
+      "hidden": 0,
+      "is_query_report": 0,
+      "label": "Nigeria ATRS Log",
+      "link_count": 0,
+      "link_to": "Nigeria ATRS Log",
+      "link_type": "DocType",
+      "onboard": 0,
+      "parent_label": "e-Invoice & ATRS",
+      "type": "Link"
+    },
+    {
+      "hidden": 0,
+      "is_query_report": 1,
+      "label": "Nigeria PAYE Schedule",
+      "link_count": 0,
+      "link_to": "Nigeria PAYE Schedule",
+      "link_type": "Report",
+      "onboard": 1,
+      "parent_label": "Reports",
+      "type": "Link"
+    },
+    {
+      "hidden": 0,
+      "is_query_report": 1,
+      "label": "Nigeria VAT Return",
+      "link_count": 0,
+      "link_to": "Nigeria VAT Return",
+      "link_type": "Report",
+      "onboard": 1,
+      "parent_label": "Reports",
+      "type": "Link"
+    },
+    {
+      "hidden": 0,
+      "is_query_report": 1,
+      "label": "Nigeria WHT Schedule",
+      "link_count": 0,
+      "link_to": "Nigeria WHT Schedule",
+      "link_type": "Report",
+      "onboard": 1,
+      "parent_label": "Reports",
+      "type": "Link"
+    },
+    {
+      "hidden": 0,
+      "is_query_report": 1,
+      "label": "Nigeria Pension Schedule",
+      "link_count": 0,
+      "link_to": "Nigeria Pension Schedule",
+      "link_type": "Report",
+      "onboard": 0,
+      "parent_label": "Reports",
+      "type": "Link"
+    },
+    {
+      "hidden": 0,
+      "is_query_report": 0,
+      "label": "Nigeria Data Subject Request",
+      "link_count": 0,
+      "link_to": "Nigeria Data Subject Request",
+      "link_type": "DocType",
+      "onboard": 0,
+      "parent_label": "NDPR",
+      "type": "Link"
+    }
+  ],
+  "module": "Zinye Nigeria",
+  "name": "Nigeria",
+  "public": 1,
+  "roles": [],
+  "title": "Nigeria",
+  "type": "Module"
+}

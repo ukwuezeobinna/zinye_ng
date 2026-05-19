@@ -46,3 +46,12 @@ def format_naira(amount: float | int | str | None, show_symbol: bool = True) -> 
 
     formatted = f"{value:,.2f}"
     return f"₦{formatted}" if show_symbol else formatted
+
+
+def is_einvoice_enabled() -> bool:
+    """Jinja helper: returns True if FIRSMBS e-invoicing is enabled."""
+    import frappe
+    try:
+        return bool(frappe.db.get_single_value("Nigeria Compliance Settings", "einvoice_enabled"))
+    except Exception:
+        return False

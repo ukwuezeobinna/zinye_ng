@@ -24,12 +24,14 @@ _NIGERIA_REPORTS = [
 def after_install():
     create_nigeria_custom_fields()
     create_default_nigeria_payroll_settings()
+    create_default_compliance_settings()
     add_custom_roles_for_reports()
     frappe.db.commit()
 
 
 def after_migrate():
     create_nigeria_custom_fields()
+    create_default_compliance_settings()
     _link_payroll_components()
     _create_ng_salary_structures()
     frappe.db.commit()
@@ -312,6 +314,21 @@ def _get_custom_fields():
             },
         ],
     }
+
+
+def create_default_compliance_settings():
+    if frappe.db.exists("Nigeria Compliance Settings", "Nigeria Compliance Settings"):
+        return
+    doc = frappe.new_doc("Nigeria Compliance Settings")
+    doc.einvoice_environment = "Sandbox"
+    doc.einvoice_sandbox_url = "https://api-sandbox.einvoice.firs.gov.ng"
+    doc.einvoice_production_url = "https://api.einvoice.firs.gov.ng"
+    doc.einvoice_default_vat_rate = 7.5
+    doc.einvoice_b2b_only = 1
+    doc.einvoice_auto_submit = 1
+    doc.atrs_environment = "Development"
+    doc.atrs_auto_submit = 1
+    doc.insert(ignore_permissions=True)
 
 
 def _link_payroll_components():

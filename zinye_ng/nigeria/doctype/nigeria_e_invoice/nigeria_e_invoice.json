@@ -1,5 +1,6 @@
 {
   "actions": [],
+  "autoname": "format:EINV-NG-{YYYY}-{#####}",
   "creation": "2026-01-01 00:00:00.000000",
   "doctype": "DocType",
   "document_type": "Document",
@@ -9,9 +10,28 @@
     "sales_invoice",
     "status",
     "col_break_1",
+    "invoice_type",
+    "submitted_at",
+    "cleared_at",
+    "identifiers_section",
     "irn",
     "csid",
-    "submitted_at",
+    "col_break_ids",
+    "qr_code",
+    "invoice_section",
+    "invoice_number",
+    "invoice_date",
+    "col_break_inv",
+    "seller_tin",
+    "buyer_tin",
+    "total_excluding_vat",
+    "vat_amount",
+    "grand_total",
+    "retry_section",
+    "retry_count",
+    "last_retry_at",
+    "col_break_retry",
+    "max_retries",
     "payload_section",
     "payload",
     "col_break_payload",
@@ -20,28 +40,222 @@
     "error_message"
   ],
   "fields": [
-    {"fieldname": "sales_invoice", "fieldtype": "Link", "label": "Sales Invoice", "options": "Sales Invoice", "reqd": 1, "in_list_view": 1, "unique": 1},
-    {"fieldname": "status", "fieldtype": "Select", "label": "Status", "options": "Pending\nSubmitted\nCleared\nFailed", "reqd": 1, "in_list_view": 1, "in_filter": 1},
-    {"fieldname": "col_break_1", "fieldtype": "Column Break"},
-    {"fieldname": "irn", "fieldtype": "Data", "label": "IRN", "read_only": 1, "in_list_view": 1, "description": "Invoice Reference Number from NRS FIRSMBS"},
-    {"fieldname": "csid", "fieldtype": "Data", "label": "CSID", "read_only": 1, "description": "Cryptographic Stamp Identifier from NRS"},
-    {"fieldname": "submitted_at", "fieldtype": "Datetime", "label": "Submitted At", "read_only": 1},
-    {"fieldname": "payload_section", "fieldtype": "Section Break", "label": "API Payload / Response", "collapsible": 1},
-    {"fieldname": "payload", "fieldtype": "Code", "label": "Request Payload", "read_only": 1, "options": "JSON"},
-    {"fieldname": "col_break_payload", "fieldtype": "Column Break"},
-    {"fieldname": "response", "fieldtype": "Code", "label": "NRS Response", "read_only": 1, "options": "JSON"},
-    {"fieldname": "error_section", "fieldtype": "Section Break", "label": "Error", "collapsible": 1, "depends_on": "eval:doc.error_message"},
-    {"fieldname": "error_message", "fieldtype": "Small Text", "label": "Error Message", "read_only": 1}
+    {
+      "fieldname": "sales_invoice",
+      "fieldtype": "Link",
+      "label": "Sales Invoice",
+      "options": "Sales Invoice",
+      "reqd": 1,
+      "in_list_view": 1,
+      "unique": 1
+    },
+    {
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "label": "Status",
+      "options": "Pending\nSubmitted\nAuto-Retry\nCleared\nFailed\nCancelled",
+      "reqd": 1,
+      "in_list_view": 1,
+      "in_filter": 1
+    },
+    {
+      "fieldname": "col_break_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "invoice_type",
+      "fieldtype": "Select",
+      "label": "Invoice Type",
+      "options": "B2B\nB2C",
+      "read_only": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "submitted_at",
+      "fieldtype": "Datetime",
+      "label": "Submitted At",
+      "read_only": 1
+    },
+    {
+      "fieldname": "cleared_at",
+      "fieldtype": "Datetime",
+      "label": "Cleared At",
+      "read_only": 1
+    },
+    {
+      "fieldname": "identifiers_section",
+      "fieldtype": "Section Break",
+      "label": "NRS Identifiers"
+    },
+    {
+      "fieldname": "irn",
+      "fieldtype": "Data",
+      "label": "IRN",
+      "read_only": 1,
+      "in_list_view": 1,
+      "description": "Invoice Reference Number issued by NRS FIRSMBS after clearance."
+    },
+    {
+      "fieldname": "csid",
+      "fieldtype": "Data",
+      "label": "CSID",
+      "read_only": 1,
+      "description": "Cryptographic Stamp Identifier from NRS."
+    },
+    {
+      "fieldname": "col_break_ids",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "qr_code",
+      "fieldtype": "Attach Image",
+      "label": "QR Code",
+      "read_only": 1,
+      "description": "QR code to print on the invoice. Generated from the CSID."
+    },
+    {
+      "fieldname": "invoice_section",
+      "fieldtype": "Section Break",
+      "label": "Invoice Summary",
+      "collapsible": 1
+    },
+    {
+      "fieldname": "invoice_number",
+      "fieldtype": "Data",
+      "label": "Invoice Number",
+      "read_only": 1
+    },
+    {
+      "fieldname": "invoice_date",
+      "fieldtype": "Date",
+      "label": "Invoice Date",
+      "read_only": 1
+    },
+    {
+      "fieldname": "col_break_inv",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "seller_tin",
+      "fieldtype": "Data",
+      "label": "Seller TIN",
+      "read_only": 1
+    },
+    {
+      "fieldname": "buyer_tin",
+      "fieldtype": "Data",
+      "label": "Buyer TIN",
+      "read_only": 1
+    },
+    {
+      "fieldname": "total_excluding_vat",
+      "fieldtype": "Currency",
+      "label": "Total (excl. VAT)",
+      "read_only": 1,
+      "options": "NGN"
+    },
+    {
+      "fieldname": "vat_amount",
+      "fieldtype": "Currency",
+      "label": "VAT Amount",
+      "read_only": 1,
+      "options": "NGN"
+    },
+    {
+      "fieldname": "grand_total",
+      "fieldtype": "Currency",
+      "label": "Grand Total",
+      "read_only": 1,
+      "options": "NGN"
+    },
+    {
+      "fieldname": "retry_section",
+      "fieldtype": "Section Break",
+      "label": "Retry",
+      "collapsible": 1
+    },
+    {
+      "fieldname": "retry_count",
+      "fieldtype": "Int",
+      "label": "Retry Count",
+      "default": "0",
+      "read_only": 1
+    },
+    {
+      "fieldname": "last_retry_at",
+      "fieldtype": "Datetime",
+      "label": "Last Retry",
+      "read_only": 1
+    },
+    {
+      "fieldname": "col_break_retry",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "max_retries",
+      "fieldtype": "Int",
+      "label": "Max Retries",
+      "default": "3"
+    },
+    {
+      "fieldname": "payload_section",
+      "fieldtype": "Section Break",
+      "label": "API Payload / Response",
+      "collapsible": 1
+    },
+    {
+      "fieldname": "payload",
+      "fieldtype": "Code",
+      "label": "Request Payload",
+      "read_only": 1,
+      "options": "JSON"
+    },
+    {
+      "fieldname": "col_break_payload",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "response",
+      "fieldtype": "Code",
+      "label": "NRS Response",
+      "read_only": 1,
+      "options": "JSON"
+    },
+    {
+      "fieldname": "error_section",
+      "fieldtype": "Section Break",
+      "label": "Error",
+      "collapsible": 1,
+      "depends_on": "eval:doc.error_message"
+    },
+    {
+      "fieldname": "error_message",
+      "fieldtype": "Small Text",
+      "label": "Error Message",
+      "read_only": 1
+    }
   ],
   "module": "Nigeria",
   "name": "Nigeria E-Invoice",
   "permissions": [
-    {"role": "Accounts User", "read": 1},
-    {"role": "Accounts Manager", "read": 1, "write": 1},
-    {"role": "System Manager", "read": 1, "write": 1, "delete": 1}
+    {
+      "role": "Accounts User",
+      "read": 1
+    },
+    {
+      "role": "Accounts Manager",
+      "read": 1,
+      "write": 1
+    },
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "delete": 1
+    }
   ],
   "search_fields": "sales_invoice,irn,status",
-  "sort_field": "modified",
+  "sort_field": "creation",
   "sort_order": "DESC",
   "title_field": "sales_invoice",
   "track_changes": 1

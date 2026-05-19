@@ -170,10 +170,40 @@ def _create_wht_journal_entry(doc, wht_amount: float):
 
 
 def _get_payable_account(doc) -> str:
-    """Find the payable account for the supplier from the Purchase Invoice."""
-    # ERPNext stores the payable account on the invoice
     if doc.credit_to:
         return doc.credit_to
-
-    # Fallback: look up default payable from company
     return frappe.get_cached_value("Company", doc.company, "default_payable_account")
+
+
+# ── Public API used by NigeriaPurchaseInvoiceMixin ───────────────────────────
+
+def validate_wht(doc, method=None):
+    """doc_events validate: auto-fill WHT rate from supplier category if applicable."""
+    if not doc.get("ng_wht_applicable"):
+        return
+    rate = _get_wht_rate(doc)
+    if rate and not flt(doc.get("ng_wht_rate")):
+        doc.ng_wht_rate = rate
+        doc.ng_wht_amount = round(flt(doc.net_total) * (rate / 100), 2)
+
+
+def get_supplier_wht_rate(supplier: str) -> float:
+    """Return the default WHT rate for a supplier based on their WHT category."""
+    category = frappe.db.get_value("Supplier", supplier, "ng_wht_category") or ""
+    return DEFAULT_WHT_RATES.get(category, 0.0)
+
+
+def calculate_wht(doc) -> dict | None:
+    """Calculate WHT for a Purchase Invoice. Returns None if not applicable."""
+    rate = _get_wht_rate(doc)
+    if not rate:
+        return None
+    amount = round(flt(doc.net_total) * (rate / 100), 2)
+    return {"rate": rate, "amount": amount}
+
+
+def apply_wht_to_invoice(doc, wht_data: dict):
+    """Set WHT fields on a draft Purchase Invoice document (in-memory, not saved)."""
+    doc.ng_wht_applicable = 1
+    doc.ng_wht_rate = wht_data["rate"]
+    doc.ng_wht_amount = wht_data["amount"]

@@ -1,1 +1,1 @@
-# patches go here
+zinye_ng.nigeria.patches.v0_2.rename_nrs_doctypes.execute

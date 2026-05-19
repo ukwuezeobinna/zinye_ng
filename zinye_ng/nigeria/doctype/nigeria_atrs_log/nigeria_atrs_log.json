@@ -1,0 +1,157 @@
+{
+  "actions": [],
+  "autoname": "format:ATRS-{YYYY}-{#####}",
+  "creation": "2026-01-01 00:00:00.000000",
+  "doctype": "DocType",
+  "document_type": "Document",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "document_type",
+    "document_name",
+    "col_break_1",
+    "status",
+    "submitted_at",
+    "bill_section",
+    "bill_number",
+    "total_value",
+    "vat_amount",
+    "col_break_bill",
+    "payment_type",
+    "payment_code",
+    "currency_code",
+    "error_section",
+    "error_message",
+    "retry_count"
+  ],
+  "fields": [
+    {
+      "fieldname": "document_type",
+      "fieldtype": "Link",
+      "label": "Document Type",
+      "options": "DocType",
+      "reqd": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "document_name",
+      "fieldtype": "Dynamic Link",
+      "label": "Document",
+      "options": "document_type",
+      "reqd": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "col_break_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "label": "Status",
+      "options": "Pending\nSubmitted\nFailed",
+      "reqd": 1,
+      "in_list_view": 1,
+      "in_filter": 1
+    },
+    {
+      "fieldname": "submitted_at",
+      "fieldtype": "Datetime",
+      "label": "Submitted At",
+      "read_only": 1
+    },
+    {
+      "fieldname": "bill_section",
+      "fieldtype": "Section Break",
+      "label": "Bill Details"
+    },
+    {
+      "fieldname": "bill_number",
+      "fieldtype": "Data",
+      "label": "Bill Number"
+    },
+    {
+      "fieldname": "total_value",
+      "fieldtype": "Currency",
+      "label": "Total Value",
+      "options": "currency_code"
+    },
+    {
+      "fieldname": "vat_amount",
+      "fieldtype": "Currency",
+      "label": "VAT Amount",
+      "options": "currency_code",
+      "read_only": 1
+    },
+    {
+      "fieldname": "col_break_bill",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "payment_type",
+      "fieldtype": "Select",
+      "label": "Payment Type",
+      "options": "\nC - Cash\nT - Bank Transfer\nK - Credit Card\nD - Debit Card\nP - Post Payment\nO - Other"
+    },
+    {
+      "fieldname": "payment_code",
+      "fieldtype": "Data",
+      "label": "ATRS Payment Code",
+      "read_only": 1,
+      "in_list_view": 1,
+      "description": "Unique code returned by FIRS ATRS on successful submission."
+    },
+    {
+      "fieldname": "currency_code",
+      "fieldtype": "Data",
+      "label": "Currency",
+      "default": "NGN",
+      "read_only": 1
+    },
+    {
+      "fieldname": "error_section",
+      "fieldtype": "Section Break",
+      "label": "Error",
+      "collapsible": 1,
+      "depends_on": "eval:doc.error_message || doc.status === 'Failed'"
+    },
+    {
+      "fieldname": "error_message",
+      "fieldtype": "Small Text",
+      "label": "Error Message",
+      "read_only": 1
+    },
+    {
+      "fieldname": "retry_count",
+      "fieldtype": "Int",
+      "label": "Retry Count",
+      "default": "0",
+      "read_only": 1
+    }
+  ],
+  "in_create": 0,
+  "module": "Nigeria",
+  "name": "Nigeria ATRS Log",
+  "permissions": [
+    {
+      "role": "Accounts User",
+      "read": 1
+    },
+    {
+      "role": "Accounts Manager",
+      "read": 1,
+      "write": 1
+    },
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "delete": 1
+    }
+  ],
+  "search_fields": "document_name,payment_code,status",
+  "sort_field": "creation",
+  "sort_order": "DESC",
+  "title_field": "document_name",
+  "track_changes": 0
+}

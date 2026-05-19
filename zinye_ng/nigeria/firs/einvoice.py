@@ -106,6 +106,10 @@ def build_invoice_payload(sales_invoice: str) -> dict[str, Any]:
     settings = _get_settings()
 
     from zinye_ng.nigeria.constants.invoice_types import get_invoice_type_code, get_invoice_type_label
+    from zinye_ng.nigeria.constants.payment_means import get_payment_means_code
+    from zinye_ng.nigeria.constants.tax_categories import get_tax_category_code
+    from zinye_ng.nigeria.constants.states import get_state_code
+    from zinye_ng.nigeria.firs.resources import get_quantity_code
 
     seller_tin = (
         frappe.db.get_value("Company", doc.company, "ng_tin")
@@ -120,20 +124,39 @@ def build_invoice_payload(sales_invoice: str) -> dict[str, Any]:
     # B2B/B2C is a separate buyer classification, distinct from the UBL invoice type code
     buyer_type = "B2B" if buyer_tin else "B2C"
 
+    seller_state_name = (
+        frappe.db.get_value("Company", doc.company, "ng_registered_state")
+        or settings.registered_state
+        or ""
+    )
+    seller_state_code = get_state_code(seller_state_name)
+
+    # Payment means: read from Sales Invoice custom field, fallback to mode of payment
+    payment_mode = doc.get("ng_payment_means") or doc.get("mode_of_payment") or ""
+    payment_means_code = get_payment_means_code(payment_mode)
+
     vat_rate = settings.einvoice_default_vat_rate or 7.5
+    tax_category_code = get_tax_category_code(vat_rate)
+
     items = []
     total_vat = 0.0
 
     for row in doc.items:
         line_vat = round(float(row.net_amount) * (vat_rate / 100), 2)
         total_vat += line_vat
+        # HS code / service code from item custom fields (populated via sync_hs_codes)
+        hs_code = frappe.db.get_value("Item", row.item_code, "ng_hs_code") or ""
+        service_code = frappe.db.get_value("Item", row.item_code, "ng_service_code") or ""
         items.append({
             "lineId": str(row.idx),
-            "productCode": row.item_code,
+            "productCode": hs_code or row.item_code,
+            "serviceCode": service_code,
             "description": row.item_name or row.description or "",
             "quantity": float(row.qty),
+            "quantityCode": get_quantity_code(row.uom or ""),
             "unitPrice": float(row.rate),
             "netAmount": float(row.net_amount),
+            "taxCategoryCode": tax_category_code,
             "vatRate": vat_rate,
             "vatAmount": line_vat,
             "lineTotal": float(row.amount),
@@ -154,23 +177,26 @@ def build_invoice_payload(sales_invoice: str) -> dict[str, Any]:
         "invoiceTypeDescription": invoice_type_label,  # e.g. "Commercial Invoice"
         "buyerType": buyer_type,                    # "B2B" or "B2C" — separate from UBL type
         "currency": doc.currency or "NGN",
+        "paymentMeansCode": payment_means_code,     # UBL UN/ECE 4461
 
         # Category 3: Seller details
         "sellerName": doc.company,
         "sellerAddress": company.company_description or "",
-        "sellerState": frappe.db.get_value("Company", doc.company, "ng_registered_state") or settings.registered_state or "",
+        "sellerState": seller_state_name,
+        "sellerStateCode": seller_state_code,       # ISO 3166-2 (e.g. "NG-LA")
         "sellerVATNumber": settings.vat_registration_number or "",
 
         # Category 4: Buyer details
         "buyerName": doc.customer_name,
         "buyerAddress": doc.customer_address or "",
 
-        # Category 5: Line items
+        # Category 5: Line items (with HS/service codes, UOM codes, tax category)
         "lineItems": items,
 
         # Category 6: Tax breakdown
         "totalVAT": round(total_vat, 2),
         "vatRate": vat_rate,
+        "taxCategoryCode": tax_category_code,
 
         # Category 7: Financial totals
         "netTotal": float(doc.net_total),

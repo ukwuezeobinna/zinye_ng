@@ -94,6 +94,7 @@ scheduler_events = {
     ],
     "daily": [
         "zinye_ng.nigeria.firs.scheduled.retry_failed_atrs",
+        "zinye_ng.nigeria.firs.scheduled.sync_firs_resources",
         "zinye_ng.nigeria.ndpr.send_sla_warnings",
     ],
 }

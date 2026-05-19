@@ -110,6 +110,12 @@ def poll_pending_einvoices():
         frappe.db.commit()
 
 
+def sync_firs_resources():
+    """Daily: refresh FIRS reference data cache (countries, currencies, LGAs, quantity codes)."""
+    from zinye_ng.nigeria.firs.resources import sync_firs_resources as _sync
+    _sync()
+
+
 def retry_failed_atrs():
     """
     Daily: retry Failed ATRS submissions from the last 24 hours.
